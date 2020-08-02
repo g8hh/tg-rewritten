@@ -1,0 +1,95 @@
+env:
+    browser: true
+    es6: true
+extends:
+    - "eslint:recommended"
+    - "plugin:vue/essential"
+globals:
+    Atomics: readonly
+    SharedArrayBuffer: readonly
+parserOptions:
+    ecmaVersion: 11
+root: true
+plugins:
+    - vue
+rules:
+    accessor-pairs:
+        - warn
+        - setWithoutGet: true
+    array-bracket-newline:
+        - error
+        - multiline: true
+    array-bracket-spacing:
+        - error
+        - never
+    array-callback-return:
+        - error
+    array-element-newline:
+        - error
+        - multiline: true
+    arrow-body-style:
+        - error
+        - as-needed
+    arrow-parens:
+        - error
+        - as-needed
+    arrow-spacing:
+        - error
+        - before: true
+          after: true
+    block-scoped-var:
+        - error
+    block-spacing:
+        - error
+        - always
+    brace-style:
+        - error
+        - 1tbs
+    callback-return:
+        - error
+        - - callback
+          - cb
+          - next
+    camelcase:
+        - error
+    capitalized-comments:
+        - warn
+        - always
+    comma-dangle:
+        - warn
+        - only-multiline
+    comma-spacing:
+        - warn
+    complexity:
+        - warn
+    computed-propterty-spacing:
+        - error
+    consistent-return:
+        - error
+    consistent-this:
+        - error
+        - that
+    curly:
+        - error
+        - multi-or-nest
+    default-param-last:
+        - warn
+    dot-location:
+        - error
+        - object
+    eol-last:
+        - warn
+    eqeqeq:
+        - error
+        - always
+    func-call-spacing:
+        - error
+    func-name-matching:
+        - error
+        - always
+    func-names:
+        - error
+        - as-needed
+    func-style:
+        - error
+        - declaration

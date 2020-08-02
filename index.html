@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<!--
+Tree Game is an incremental game based around a skill tree.
+It is licensed under the MIT lscense and made by Yhvr.
+-->
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="application-name" content="Tree Game">
+	<meta name="author" content="Yhvr">
+	<meta name="description" content="Tree Game is an incremental game based around a skill tree.">
+	<meta name="keywords" content="Incremental Game, Game, Skill Tree, HTML5, Tree Game, JS, Javascript, Javascript Game">
+	<title id="title">Tree Game</title>
+	<link rel="manifest" href="manifest.webmanifest">
+	<link id="themecss" type="text/css" rel="stylesheet" href="themes/Light.css">
+	<link type="text/css" rel="stylesheet" href="game.css">
+	<link id="hovercss" type="text/css" rel="stylesheet" href="themes/hover.css">
+	<link rel="shortcut icon" type="image/png" href="images/TG-192.png"/>
+</head>
+<body>
+	<div id="loading">
+		<span>
+			Loading...
+			<sup>If you see this for over a second, the game probably errored.</sup>
+		</span>
+	</div>
+	<div id="app">
+	<noscript>Tree Game requires you to enable JavaScript to play. If you don't know what JavaScript is or didn't disable it, try using another web browser.</noscript>
+	<div id="header">
+		<div id="tabs">
+			<button class="btn tabbtn" id="upgrades" onclick="showTab(0)">Upgrade Tree</button>
+			<button class="btn tabbtn" id="rebirth" onclick="showTab(1)" v-if="game.rebirthed">Rebirth Tree</button>
+			<button class="btn tabbtn" id="another" onclick="showTab(2)" v-if="game.rupgrades[14] > 0">Another Tree</button>
+			<button class="btn tabbtn" id="trial" onclick="showTab(3)" style="display:none;">Trial Tree</button>
+			<button class="btn tabbtn" id="options" onclick="showTab(4)">Options</button>
+		</div>
+		<div id="currencies">
+			<span id="x">{{ format(game.x.amount) }}&hairsp;x</span>
+			<span id="y" v-if="game.upgrades.includes(13) || game.rupgrades[14] > 0">{{ format(game.y.amount) }}&hairsp;y</span>
+			<span id="z" v-if="game.upgrades.includes(47) || game.rupgrades[14] > 0">{{ format(game.z.amount) }}&hairsp;z</span>
+			<span id="rp" v-if="game.rebirthed">{{ format(game.rp.amount )}}RP</span>
+			<span id="a" v-if="game.rupgrades[14] > 0">{{ format(game.a.amount) }}&hairsp;a</span>
+			<span id="b" v-if="game.b.bought.gte(1)">{{ format(game.b.amount) }}&hairsp;b</span>
+			<span id="c" v-if="game.c.bought.gte(1)">{{ format(game.c.amount) }}&hairsp;c</span>
+		</div>
+		<div id="center-btns">
+			<button class="btn centerbtn" onclick="max()">Max All (m)</button>
+			<button class="btn centerbtn" onclick="respecRebirthTree()" v-if="game.currentTab === 1">Respec Rebirth Tree.</button>
+		</div>
+	</div>
+
+	<p v-if="game.currentTab >= 10 || game.currentTab < 0">oi what ya doin</p>
+
+	<div id="upgradesTab" class="tab"> <!-- Upgrade tab -->
+	<div class="table">
+		<td><button :class="uclass(13)" id="13" onclick="buyCurrency(this, 'y')" v-html="upg(13)">.</button></td>
+		<td><button :class="uclass(14)" id="14" onclick="buybtn(this)"           v-html="upg(14)">.</button></td>
+		<td><button :class="uclass(15)" id="15" onclick="buyCurrency(this, 'x')" v-html="upg(15)">.</button></td>
+		<td><button :class="uclass(16)" id="16" onclick="buybtn(this)"           v-html="upg(16)">.</button></td>
+		<td><button :class="uclass(17)" id="17" onclick="rebirth()">
+			Rebirth.<br>
+			<span v-if="rawCalcRP().lt(1)">in {{ rForm.format(rawCalcRP().sub(1).abs(), 2, 2) }} RP<br></span>
+			<span v-if="rawCalcRP().gte(1)">next in {{ rForm.format(1 - (rawCalcRP().mod(1).toNumber()), 2, 2) }} RP<br></span>
+			{{ format(calcRP()) }}&hairsp;RP</button></td>
+		<td><button :class="uclass(18)" id="18" onclick="buybtn(this)"           v-html="upg(18)">.</button></td>
+		<td><button :class="uclass(19)" v-if="game.rupgrades[65] >= 1" id="19" onclick="buybtn(this)"           v-html="upg(19)">.</button></td>
+	</div>
+	<div class="table">
+		<td><button :class="uclass(23)" id="23" onclick="buybtn(this)"  v-html="upg(23)"></button></td>
+		<td><button :class="uclass(24)" id="24" onclick="buybtn(this)"  v-html="upg(24)"></button></td>
+		<td><button :class="uclass(25)" id="25" onclick="buybtn(this)"  v-html="upg(25)"></button></td>
+		<td><button :class="uclass(26)" id="26" onclick="buybtn(this)"  v-html="upg(26)"></button></td>
+		<td><button :class="uclass(27)" id="27" onclick="buybtn(this)"  v-html="upg(27)"></button></td>
+		<td><button :class="uclass(28)" id="28" onclick="buybtn(this)"  v-html="upg(28)"></button></td>
+		<td><button :class="uclass(29)" v-if="game.rupgrades[65] >= 1" id="29" onclick="buybtn(this)"  v-html="upg(29)"></button></td>
+	</div>
+	<div class="table">
+		<td><button :class="uclass(33)" id="33" onclick="buybtn(this)" v-html="upg(33)"></button></td>
+		<td><button :class="uclass(34)" id="34" onclick="buybtn(this)" v-html="upg(34)"></button></td>
+		<td><button :class="uclass(35)" id="35" onclick="buybtn(this)" v-html="upg(35)">Loading Game...</button></td>
+		<td><button :class="uclass(36)" id="36" onclick="buybtn(this)" v-html="upg(36)"></button></td>
+		<td><button :class="uclass(37)" id="37" onclick="buybtn(this)" v-html="upg(37)"></button></td>
+		<td><button :class="uclass(38)" id="38" onclick="buybtn(this)" v-html="upg(38)"></button></td>
+		<td><button :class="uclass(39)" v-if="game.rupgrades[65] >= 1" id="39" onclick="buybtn(this)" v-html="upg(39)"></button></td>
+	</div>
+	<div class="table">
+		<td><button :class="uclass(43)" id="43" onclick="buybtn(this)" v-html="upg(43)"></button></td>
+		<td><button :class="uclass(44)" id="44" onclick="buybtn(this)" v-html="upg(44)"></button></td>
+		<td><button :class="uclass(45)" id="45" onclick="buybtn(this)" v-html="upg(45)"></button></td>
+		<td><button :class="uclass(46)" id="46" onclick="buybtn(this)" v-html="upg(46)"></button></td>
+		<td><button :class="uclass(47)" id="47" onclick="buyCurrency(this, 'z')" v-html="upg(47)"></button></td>
+		<td><button :class="uclass(48)" id="48" onclick="buybtn(this)" v-html="upg(48)"></button></td>
+		<td><button :class="uclass(49)" v-if="game.rupgrades[65] >= 1" id="49" onclick="buybtn(this)" v-html="upg(49)"></button></td>
+	</div>
+	<div class="table">
+		<td><button :class="uclass(53)" id="53" onclick="buybtn(this)" v-html="upg(53)"></button></td>
+		<td><button :class="uclass(54)" id="54" onclick="alert('pogger')">pogger button</button></td>
+		<td><button :class="uclass(55)" id="55" onclick="buybtn(this)" v-html="upg(55)"></button></td>
+		<td><button :class="uclass(56)" id="56" onclick="buybtn(this)" v-html="upg(56)"></button></td>
+		<td><button :class="uclass(57)" id="57" onclick="buybtn(this)" v-html="upg(57)"></button></td>
+		<td><button :class="uclass(58)" id="58" onclick="buybtn(this)" v-html="upg(58)"></button></td>
+		<td><button :class="uclass(59)" v-if="game.rupgrades[65] >= 1" id="59" onclick="buybtn(this)" v-html="upg(59)"></button></td>
+	</div>
+	<div class="table">
+		<td><button :class="uclass(63)" id="63" onclick="buybtn(this)" v-html="upg(63)"></button></td>
+		<td><button :class="uclass(64)" id="64" onclick="buybtn(this)" v-html="upg(64)"></button></td>
+		<td><button :class="uclass(65)" id="65" onclick="buybtn(this)" v-html="upg(65)"></button></td>
+		<td><button :class="uclass(66)" id="66" onclick="buybtn(this)" v-html="upg(66)"></button></td>
+		<td><button :class="uclass(67)" id="67" onclick="buybtn(this)" v-html="upg(67)"></button></td>
+		<td><button :class="uclass(68)" id="68" onclick="buybtn(this)" v-html="upg(68)"></button></td>
+		<td><button :class="uclass(69)" v-if="game.rupgrades[65] >= 1" id="69" onclick="buybtn(this)" v-html="upg(69)"></button></td>
+	</div>
+	<div v-if="game.rupgrades[65] >= 2" class="table">
+		<td><button :class="uclass(73)" id="73" onclick="buybtn(this)" v-html="upg(73)"></button></td>
+		<td><button :class="uclass(74)" id="74" onclick="buybtn(this)" v-html="upg(74)"></button></td>
+		<td><button :class="uclass(75)" id="75" onclick="buybtn(this)" v-html="upg(75)"></button></td>
+		<td><button :class="uclass(76)" id="76" onclick="buybtn(this)" v-html="upg(76)"></button></td>
+		<td><button :class="uclass(77)" id="77" onclick="buybtn(this)" v-html="upg(77)"></button></td>
+		<td><button :class="uclass(78)" id="78" onclick="buybtn(this)" v-html="upg(78)"></button></td>
+		<td><button :class="uclass(79)" id="79" onclick="buybtn(this)" v-html="upg(79)"></button></td>
+	</div>
+	</div>
+
+
+	<div id="rebirthTab" class="tab"> <!-- Rebirth Tab -->
+		<div class="table">
+			<td><button :class="rclass(11)"   id="r11" onclick="buyreb(11)" tooltip="Give a static multiplier to the production of x.">{{ rpg(11) }}<br>Currently: x{{ format(formulas.rupg11()) }}</button></td>
+			<td><button :class="rclass(12)"   id="r12" onclick="buyreb(12)" tooltip="Give a multiplier to y based on several factors.">{{ rpg(12) }}<br>Currently: x{{ format(formulas.rupg12()) }}</button></td>
+			<td><button :class="rclass(13)"   id="r13" onclick="buyreb(13)" tooltip="Decrease the cost of all upgrades.">{{ rpg(13) }}<br>Currently: ÷{{ format(costDiv[game.rupgrades[13]] || 1) }}</button></td>
+			<td><button :class="rclass(14)"   id="r14" onclick="buyAthTree()" tooltip="Unlock Another Tree.">Content Expansion<br>Cost: {{ format(85) }} Total RP</button></td>
+			<td><button :class="rautoclass()" id="r15" onclick="buyreb(15)" v-if="game.aupgrades.includes(2)" tooltip="Automate the purchasing of normal upgrades.">{{ rpg(15) }}<br>Currently: {{ formulas.rupg15() }}</button></td>
+		</div>
+		<div class="table">
+			<td><button :class="rclass(21)" id="r21" onclick="buyreb(21)" tooltip="Give a static multiplier to the production of y.">{{ rpg(21) }}<br>Currently: x{{ format(formulas.rupg21()) }}</button></td>
+			<td><button :class="rclass(22)" id="r22" onclick="buyreb(22)" tooltip="Give a multiplier to the production of x that changes over time.">{{ rpg(22) }}<br>Currently: x{{ format(formulas.rupg22()) }}</button></td>
+			<td><button :class="rclass(23)" id="r23" onclick="buyreb(23)" tooltip="Increase the core production of x.">{{ rpg(23) }}<br>Currently: {{ formulas.rupg23() }}</button></td>
+			<td><button :class="aclassa()"  id="r24" onclick="buyAthCurrency('a')">Buy an a.<br>Cost: {{ format(formulas.atha()) }} Total RP</button></td>
+			<td><button :class="rclass(25)" id="r25" onclick="buyreb(25)" v-if="game.aupgrades.includes(2)" tooltip="Give a dynamic multiplier to xyz production.">{{ rpg(25) }}<br>Currently: x{{ format(formulas.rupg25()) }}</button></td>
+		</div>
+		<div class="table">
+			<td><button :class="rclass(31)" id="r31" onclick="buyreb(31)" tooltip="Give a static multiplier to the production of z.">{{ rpg(31) }}<br>Currently: x{{ format(formulas.rupg31()) }}</button></td>
+			<td><button :class="rclass(32)" id="r32" onclick="buyreb(32)" tooltip="Give a multiplier to the production of z that grows as time progresses.">{{ rpg(32) }}<br>Currently: x{{ format(formulas.rupg32()) }}</button></td>
+			<td><button :class="rclass(33)" id="r33" onclick="buyreb(33)" tooltip="Gain a static multiplier to RP.">{{ rpg(33) }}<br>Currently: x{{ rForm.format(formulas.rupg33(), 2, 2) }}</button></td>
+			<td><button :class="aclassb()"  id="r34" onclick="buyAthCurrency('b')">Buy a b.<br>Cost: {{ format(formulas.athb()) }} Total RP</button></td>
+			<td><button :class="rclass(35)" id="r35" onclick="buyreb(35)" v-if="game.aupgrades.includes(2)" tooltip="Gain a multiplier to your RP based on the OoM of z you have.">{{ rpg(35) }}</button></td>
+		</div>
+		<div class="table">
+			<td><button :class="rclass(41)" id="r41" onclick="buyreb(41)" tooltip="Make the RP formula better.">{{ rpg(41) }}<br>Currently: {{ formulas.rupg41() }}</button></td>
+			<td><button :class="rclass(42)" id="r42" onclick="buyreb(42)" tooltip="Give a static multiplier to xyz production.">{{ rpg(42) }}<br>Currently: x{{ format(formulas.rupg42()) }}</button></td>
+			<td><button :class="rclass(43)" id="r43" onclick="buyreb(43)" tooltip="Give a multiplier to xyz production based on your total RP.">{{ rpg(43) }}<br>Currently: x{{ format(formulas.rupg43()) }}</button></td>
+			<td><button :class="aclassc()"  id="r44" onclick="buyAthCurrency('c')">Buy a c.<br>Cost: {{ format(formulas.athc()) }} Total RP</button></td>
+			<td><button :class="rclass(45)" id="r45" onclick="buyreb(45)" v-if="game.aupgrades.includes(2)" tooltip="Make upgrades that cost xyz even cheaper.">{{ rpg(45) }}</button></td>
+		</div>
+		<div class="table" v-if="game.aupgrades.includes(5)">
+			<td><button class="btn btn-hidden"></button></td>
+			<td><button class="btn btn-hidden"></button></td>
+			<td><button class="btn btn-hidden"></button></td>
+			<td><button class="btn btn-hidden"></button></td>
+			<td><button :class="rclass(55)" id="r55" onclick="buyreb(55)" tooltip="Boost xyz production based off of xyz production.">{{ rpg(55) }}</button></td>
+		</div>
+		<div class="table" v-if="game.aupgrades.includes(5)">
+			<td><button class="btn btn-hidden"></button></td>
+			<td><button class="btn btn-hidden"></button></td>
+			<td><button class="btn btn-rebirth-locked" id="r63" onclick="buyreb(63)">.</button></td>
+			<td><button class="btn btn-hidden"></button></td>
+			<td><button :class="rclass(65)" id="r65" onclick="buyreb(65)" tooltip="Unlock more upgrades on the main tree.">{{ rpg(65) }}</button></td>
+		</div>
+		<div class="table" v-if="game.aupgrades.includes(5)">
+			<td><button class="btn btn-hidden"></button></td>
+			<td><button class="btn btn-hidden"></button></td>
+			<td><button class="btn btn-hidden"></button></td>
+			<td><button class="btn btn-hidden"></button></td>
+			<td><button :class="rclass(75)" id="r75" onclick="buyreb(75)" tooltip="Gain a boost to production based on the amount of upgrades you have.">{{ rpg(75) }}</button></td>
+		</div>
+		<div class="table" v-if="game.aupgrades.includes(5)">
+			<td><button :class="rclass(81)" id="r81" onclick="buyreb(81)">.</button></td>
+			<td><button :class="rclass(82)" id="r82" onclick="buyreb(82)">.</button></td>
+			<td><button :class="rclass(83)" id="r83" onclick="buyreb(83)" tooltip="Gain a massive boost to core z production.">{{ rpg(83) }}</button></td>
+			<td><button :class="rclass(84)" id="r84" onclick="buyreb(84)" tooltip="Gain an exponential boost to y production.">{{ rpg(84) }}</button></td>
+			<td><button :class="rclass(85)" id="r85" onclick="buyreb(85)" tooltip="Gain a boost to production based on the amount of rebirth upgrades you have.">{{ rpg(85) }}</button></td>
+		</div>
+
+		<p style="text-align: center;"><em>You have {{ game.rp.total }} total RP.</em></p>
+	</div>
+
+
+	<div id="anotherTab" class="tab">
+		<div class="table">
+			<td><button class="btn btn-ath-unbought" id="a1" onclick="buyath(1)">{{ apg(1) }}</button></td>
+			<td><button class="btn btn-ath-locked"   id="a2" onclick="buyath(2)">{{ apg(2) }}</button></td>
+			<td><button class="btn btn-ath-locked"   id="a3" onclick="buyath(3)">{{ apg(3) }}</button></td>
+			<td><button class="btn btn-ath-locked"   id="a4" onclick="buyath(4)">{{ apg(4) }}</button></td>
+			<td><button class="btn btn-ath-locked"   id="a5" onclick="buyath(5)">{{ apg(5) }}</button></td>
+		</div>
+		<div class="table">
+			<td><button class="btn btn-ath-locked"   id="a6" onclick="buyath(6)">{{ apg(6) }}</button></td>
+			<td><button class="btn btn-ath-locked"   id="a7" onclick="buyath(7)">{{ apg(7) }}</button></td>
+			<td><button class="btn btn-ath-locked"   id="a8" onclick="buyath(8)">{{ apg(8) }}</button></td>
+			<td><button class="btn btn-ath-locked"   id="a9" onclick="buyath(9)">{{ apg(9) }}</button></td>
+			<td><button class="btn btn-ath-locked" id="a10" onclick="buyath(10)">{{ apg(10) }}</button></td>
+		</div>
+		<div class="table">
+			<td><button class="btn btn-ath-locked" id="a11" onclick="buyath(11)">{{ apg(11) }}</button></td>
+			<td><button class="btn btn-ath-locked" id="a12" onclick="buyath(12)">{{ apg(12) }}</button></td>
+			<td><button class="btn btn-ath-locked" id="a13" onclick="buyath(13)">{{ apg(13) }}</button></td>
+			<td><button class="btn btn-ath-locked" id="a14" onclick="buyath(14)">{{ apg(14) }}</button></td>
+			<td><button class="btn btn-ath-locked" id="a15" onclick="buyath(15)">{{ apg(15) }}</button></td>
+		</div>
+		<div class="table">
+			<td><button class="btn btn-ath-locked" id="a16" onclick="buyath(16)">{{ apg(16) }}</button></td>
+			<td><button class="btn btn-ath-locked" id="a17" onclick="buyath(17)">{{ apg(17) }}</button></td>
+			<td><button class="btn btn-ath-locked" id="a18" onclick="buyath(18)">{{ apg(18) }}</button></td>
+			<td><button class="btn btn-ath-locked" id="a19" onclick="buyath(19)">{{ apg(19) }}</button></td>
+			<td><button class="btn btn-ath-locked" id="a20" onclick="buyath(20)">{{ apg(20) }}</button></td>
+		</div>
+		<div class="table">
+			<td><button class="btn btn-ath-locked" id="a21" onclick="buyath(21)">{{ apg(21) }}</button></td>
+			<td><button class="btn btn-ath-locked" id="a22" onclick="buyath(22)">{{ apg(22) }}</button></td>
+			<td><button class="btn btn-ath-locked" id="a23" onclick="buyath(23)">{{ apg(23) }}</button></td>
+			<td><button class="btn btn-ath-locked" id="a24" onclick="buyath(24)">{{ apg(24) }}</button></td>
+			<td><button class="btn btn-ath-locked" id="a25" onclick="buyath(25)">{{ apg(25) }}</button></td>
+		</div>
+	</div>
+
+
+	<div id="trialTab" class="tab">
+		<table class="table">
+			<tr>
+				<td><button class="btn btn-trial" id="t0" onclick="enterTrial(1)">.</button></td>
+				<td><button class="btn btn-trial" id="t1" onclick="enterTrial(2)">.</button></td>
+				<td><button class="btn btn-trial" id="t2" onclick="enterTrial(3)">.</button></td>
+				<td><button class="btn btn-trial" id="t3" onclick="enterTrial(4)">.</button></td>
+				<td><button class="btn btn-trial" id="t8" onclick="completeTrial()">Copmlete the trial.</button></td>
+			</tr>
+			<tr>
+				<td><button class="btn btn-trial" id="t4" onclick="enterTrial(5)">.</button></td>
+				<td><button class="btn btn-trial" id="t5" onclick="enterTrial(6)">.</button></td>
+				<td><button class="btn btn-trial" id="t6" onclick="enterTrial(7)">.</button></td>
+				<td><button class="btn btn-trial" id="t7" onclick="enterTrial(8)">.</button></td>
+				<td><button class="btn btn-trial" id="t9" onclick="exitTrial()">Exit the trial.</button></td>
+			</tr>
+		</table>
+		<p style="text-align: center;"><em>You can do trials in any order. Complete a trial multiple times for a greater bonus.</em></p>
+	</div>
+
+
+	<div id="optionsTab" class="tab"> <!-- Options Tab-->
+		<div>
+			<button class="btn" onclick="changeTheme()" tooltip="How your game looks.">Change Theme<br>Currently <span id="theme">Light</span>.</button>
+			<div class="btn btn-fake"><span>Change Notation<br><select id="notation" onchange="changeNotation(this.value)" v-model="game.notation">
+				<option :value="index" v-for="(notation, index) in notations">{{ fancyNotations[index] || notation }}</option>
+			</select></span></div>
+			<button class="btn" onclick="changeTabPrefix()" tooltip='How the "Tree Game" games title in your browser tab looks.'>Change Tab Bar Prefix<br>Currently <span id="tabbarprefix">Long</span>.</button>
+			<button class="btn" onclick="changeTabSuffix()" tooltip='How the "___ currency" info in your browsers tab looks.'>Change Tab Bar Suffix<br>Currently <span id="tabbarsuffix">x</span>.</button>
+			<button class="btn" onclick="toggleHover()" tooltip='Make the buttons increase size when you hover over them.'>Toggle Hover<br>Currently {{ game.hover ? "ON" : "OFF" }}.</button>
+		</div>
+		<div>
+			<tr><button class="btn" onclick="save()" tooltip="Autosaves every 10 seconds. Leave the game at one point and pick it up later!">Save Game</button></tr>
+			<tr><button class="btn" onclick="resetGame()" tooltip="If you ever feel like replaying the game.">Reset Game</button></tr>
+			<button class="btn" onclick="exportGame()" tooltip="Copy the save to your clipboard in case you need it for some reason.">Export Game</button>
+			<button class="btn" onclick="importGame()" tooltip="Import a save that someone exported using the button to the left of me.">Import Game</button>
+		</div>
+		<p id="amounts">
+			<a href="credits.html">Credits</a> | <a href="help.html">Help</a> | <a href="https://yhvrwastaken.github.io/tree-game/">Legacy Edition</a> | <a href="discord_warning.html">Discord Server</a> | Tree Game v2.0.2 Alpha
+		</p>
+	</div>
+	</div>
+
+
+	<canvas id="tree-canvas" class="canvas"></canvas>
+	<!--<canvas id="rebirth-canvas" class="canvas"></canvas>
+	<canvas id="another-canvas" class="canvas"></canvas>
+	<canvas id="trial-canvas" class="canvas"></canvas>-->
+
+
+	<script type="text/javascript">
+		let promptErr = true;
+		window.onerror = (error, _, line) => {
+			if (promptErr)
+				promptErr = confirm("An error has occured in the game. If you wouldn't" +
+				" like to see any more errors, tap \"Cancel\". If possible, please " +
+				" open your browser's JavaScript console and provide a stack trace.");
+			if (promptErr) alert(`Debug Info (Please include in report)
+	Line No. ${line}
+	Error: ${error}`);
+		};
+
+		function init() {
+			if (![null, "null", "no", undefined, "{}"].includes(localStorage.getItem("treegamesave"))) load();
+			initVue();
+			renderFocusedTree();
+			showTab(game.currentTab, false)
+			$("#loading").remove();
+			if (game.a.cost) {
+				game = {
+					...game,
+					a: {
+						amount: new D(0),
+						bought: new D(0),
+					},
+					b: {
+						amount: new D(0),
+						bought: new D(0),
+					},
+					c: {
+						amount: new D(0),
+						bought: new D(0),
+					},
+				}
+			}
+		}
+	</script>
+	<script type="text/javascript" src="js/external-libs/breakinf.js"></script>
+	<script type="text/javascript" src="js/external-libs/vue.js"></script>
+	<script type="text/javascript" src="js/external-libs/notations.js"></script>
+	<script type="text/javascript" src="js/external-libs/dragscroll.js"></script>
+	<script type="text/javascript" src="js/external-libs/lzstring.js"></script>
+	<script type="text/javascript" src="js/external-libs/mousetrap.js"></script>
+	<script type="text/javascript" src="js/preload.js"></script>
+	<script type="text/javascript" src="js/formulas.js"></script>
+	<script type="text/javascript" src="js/constants.js"></script>
+	<script type="text/javascript" src="js/production.js"></script>
+	<script type="text/javascript" src="js/keybind.js"></script>
+	<script type="text/javascript" src="js/render.js"></script>
+	<script type="text/javascript" src="js/options.js"></script>
+	<script type="text/javascript" src="js/rebirth.js"></script>
+	<script type="text/javascript" src="js/choice.js"></script>
+	<script type="text/javascript" src="js/trial.js"></script>
+	<script type="text/javascript" src="js/another.js"></script>
+	<script type="text/javascript" src="js/vue.js"></script>
+	<script type="text/javascript" src="js/game.js" onload="init()"></script>
+</body>
+</html>
