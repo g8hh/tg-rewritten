@@ -98,8 +98,8 @@ function stringToDecimal(obj) {
 function save() {
 	const dec = decimalToString(game);
 	const str = JSON.stringify(dec);
-	localStorage.setItem("treegamesave", str);
-	localStorage.setItem("treegamesavebackup", str);
+	localStorage.setItem("treegamebetasave", str);
+	localStorage.setItem("treegamebetasavebackup", str);
 }
 
 function preloadChoiceTree() {
@@ -172,10 +172,10 @@ function preloadAthTree() {
 
 // Load the game
 function load() {
-	let str = localStorage.getItem("treegamesave");
-	if (!str && localStorage.getItem("treegamesavebackup")) {
+	let str = localStorage.getItem("treegamebetasave");
+	if (!str && localStorage.getItem("treegamebetasavebackup")) {
 		alert("An error occured and you lost your save, but we had a backup.");
-		str = localStorage.getItem("treegamesavebackup");
+		str = localStorage.getItem("treegamebetasavebackup");
 	} else if (!str) return;
 	if (str === undefined || str === "undefined" || str === null) return;
 	let sav = stringToDecimal(JSON.parse(str));
@@ -203,7 +203,7 @@ function load() {
 
 function exportGame() {
 	save();
-	const sav = localStorage.getItem("treegamesave");
+	const sav = localStorage.getItem("treegamebetasave");
 	const compSav = LZString.compressToEncodedURIComponent(sav);
 	copyTextToClipboard(compSav);
 }
@@ -212,7 +212,7 @@ function importGame() {
 	let sav = prompt("Please import your save:");
 	if (!sav) return;
 	sav = LZString.decompressFromEncodedURIComponent(sav);
-	localStorage.setItem("treegamesave", sav);
+	localStorage.setItem("treegamebetasave", sav);
 	window.location.reload();
 }
 
@@ -220,8 +220,8 @@ function resetGame() {
 	if (!confirm("Are you sure?")) return;
 	if (!confirm("This is a hard reset. There is no reward!")) return;
 	if (prompt("Type \"yes\" to delete your save.") !== "yes") return;
-	localStorage.removeItem("treegamesave");
-	localStorage.removeItem("treegamesavebackup");
+	localStorage.removeItem("treegamebetasave");
+	localStorage.removeItem("treegamebetasavebackup");
 	window.location.reload();
 }
 
