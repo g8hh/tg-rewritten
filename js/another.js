@@ -8,6 +8,8 @@ function buyAthTree() {
 	document.getElementById("r14").classList.remove("btn-rebirth-unbought");
 	document.getElementById("r14").classList.add("btn-rebirth-bought");
 	renderFocusedTree();
+	// vöö doesn't work for some reason, so we force an update
+	app.$forceUpdate()
 }
 
 function buyath(ele) {

@@ -249,6 +249,7 @@ select {
 	opacity: 1;
 
 	/* customizable */
+	z-index: 100000;
 	background: rgba(0, 0, 0, 0.75);
 	margin-top: 25px;
 	margin-left: -50px;

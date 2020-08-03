@@ -18,6 +18,7 @@ const formulas = {
 			ata = ata.mul(game.y.amount.add(1).log10() + 1);
 		return ata;
 	},
+	rupg13: () => costDiv[game.rupgrades[13]] || 1,
 	rupg15: () => {
 		if (game.rupgrades[15] >= 3) return "Autobuys all normal upgrades";
 		if (game.rupgrades[15] >= 2)

@@ -5,6 +5,7 @@ const upgradeInfo = {
 	14: ["Increase core production of x by 10.", 333, "x"],
 	15: ["Start the game.", 0, "x"],
 	16: ["Increase core production of x by 3.", 15, "x"],
+	17: ["."],
 	18: ["Triple all production.", 1e21, "x"],
 	19: ["Placeholder.", Infinity, "x"],
 
@@ -33,7 +34,7 @@ const upgradeInfo = {
 	49: ["Quintuple z production.", 5e79, "x"],
 
 	53: ["Raise y production to the power of 1.2.", 2.5e18, "z"],
-
+	54: ["pog champ"],
 	55: ["Multiply x production by 1000.", 1e9, "x"],
 	56: ["Multiply z production by 10.", 2.5e12, "x"],
 	57: ["Multiply y production by 10.", 1e5, "z"],
@@ -56,6 +57,12 @@ const upgradeInfo = {
 	78: ["Placeholder.", Infinity, "x"],
 	79: ["Placeholder.", Infinity, "x"],
 };
+
+const rowInfo = Object.keys(upgradeInfo)
+	.map(n => n[0])
+	.filter((n, i, s) => s.indexOf(n) === i)
+	.map(n => Object.keys(upgradeInfo).filter(m => m.startsWith(n)));
+rowInfo.unshift(null);
 
 const rebirthUpgradeInfo = {
 	11: ["Better x", [1, 2, 2, 3]],
@@ -83,15 +90,69 @@ const rebirthUpgradeInfo = {
 	44: [".", [1e100]],
 	45: ["Even Cheaper Upgrades", [25, 1e100]],
 
+	51: ["invis", [0]],
+	52: ["invis", [0]],
+	53: ["invis", [0]],
+	54: ["invis", [0]],
 	55: ["Self Buff", [10]],
-	63: ["Unlock Choice Tree.", [1e13]],
-	65: ["More Upgrades", [7, 14]],
-	75: ["Upgrade Buff", [38, 35]],
-	85: ["Rebirth Buff", [5]],
 
+	61: ["invis", [0]],
+	62: ["invis", [0]],
+	63: ["???", [1e13]],
+	64: ["invis", [0]],
+	65: ["More Upgrades", [7, 14]],
+
+	71: ["invis", [0]],
+	72: ["invis", [0]],
+	73: ["invis", [0]],
+	74: ["invis", [0]],
+	75: ["Upgrade Buff", [38, 35]],
+
+	81: ["???", [1e100]],
+	82: ["???", [1e100]],
 	83: ["Core z", [1e100]],
 	84: ["Exponential y", [45, 15, 5]],
+	85: ["Rebirth Buff", [5]],
 };
+
+const rebirthTooltips = {
+	11: "Give a static multiplier to the production of x.",
+	12: "Give a multiplier to y based on several factors.",
+	13: "Decrease the cost of all upgrades.",
+	14: "Unlock Another Tree.",
+	15: "Automate the purchasing of normal upgrades.",
+
+	21: "Give a static multiplier to the production of y.",
+	22: "Give a multiplier to the production of x that changes over time.",
+	23: "Increase the core production of x.",
+	24: "You can spend these on Another Tree.",
+	25: "Give a dynamic multiplier to xyz production.",
+
+	31: "Give a static multiplier to the production of z.",
+	32: "Give a multiplier to the production of z that grows as time progresses.",
+	33: "Gain a static multiplier to RP.",
+	34: "You can spend these on Another Tree.",
+	35: "Gain a multiplier to your RP based on the OoM of z you have.",
+
+	41: "Make the RP formula better.",
+	42: "Give a static multiplier to xyz production.",
+	43: "Give a multiplier to xyz production based on your total RP.",
+	44: "You can spend these on Another Tree.",
+	45: "Make upgrades that cost xyz even cheaper.",
+
+	55: "Boost xyz production based off of xyz production.",
+
+	63: "???",
+	65: "Unlock more upgrades on the main tree.",
+
+	75: "Gain a boost to production based on the amount of upgrades you have.",
+}
+
+const rebirthRowInfo = Object.keys(rebirthUpgradeInfo)
+	.map(n => n[0])
+	.filter((n, i, s) => s.indexOf(n) === i)
+	.map(n => Object.keys(rebirthUpgradeInfo).filter(m => m.startsWith(n)));
+rebirthRowInfo.unshift(null);
 
 // Last one could be janky
 const costDiv = [1, 2, 5, 25, 100, 5e7, 1e50];
@@ -163,21 +224,49 @@ const anotherUpgrades = {
 
 	6: ["help i ran out of ideas.", 1e100, "a"],
 	7: ["Get 0.05a/s.", 100, "b"],
-	8: ["Minecraft IRL, your computer turns into a 1-meter cube of solid metal.", 1e100, "a"],
-	9: ["Make the \"Exponential y\" upgrade more powerful.", 10, "a"],
-	10: ["Make everyone realize it's called \"Another Tree\" and not \"abc Tree\".", 1e100, "a"],
+	8: [
+		"Minecraft IRL, your computer turns into a 1-meter cube of solid metal.",
+		1e100,
+		"a",
+	],
+	9: ['Make the "Exponential y" upgrade more powerful.', 10, "a"],
+	10: [
+		'Make everyone realize it\'s called "Another Tree" and not "abc Tree".',
+		1e100,
+		"a",
+	],
 
-	11: ["Spend an hour making your terminal look fancy instead of working on the game.", 1e100, "a"],
-	12: ["Realize it's gonna be a while before you can automate a production.", 1e100, "a"],
+	11: [
+		"Spend an hour making your terminal look fancy instead of working on the game.",
+		1e100,
+		"a",
+	],
+	12: [
+		"Realize it's gonna be a while before you can automate a production.",
+		1e100,
+		"a",
+	],
 	13: ["never gonna give you up, get rique rol't!", 1e100, "a"],
-	14: ["Gain the ability to say curse words on any Discord server.", 1e100, "a"],
+	14: [
+		"Gain the ability to say curse words on any Discord server.",
+		1e100,
+		"a",
+	],
 	15: ["Remove all timewalls from OM.", 1e100, "a"],
 
-	16: ["Get around to making all the other options selects instead of buttons.", 1e100, "a"],
+	16: [
+		"Get around to making all the other options selects instead of buttons.",
+		1e100,
+		"a",
+	],
 	17: ["Migrate from break_infinty to break_eternity.", 1e100, "a"],
 	18: ["Leak Yhvr's localhost, getting access to beta beta.", 1e100, "a"],
 	19: ["Ghostify IRL.", 1e100, "a"],
-	20: ["Multiply all production by infinity. Game over, you won.", 1e100, "a"],
+	20: [
+		"Multiply all production by infinity. Game over, you won.",
+		1e100,
+		"a",
+	],
 
 	21: ["Get admin on the Discord server.", 1e100, "a"],
 	22: ["Realize these are all placeholders.", 1e100, "a"],

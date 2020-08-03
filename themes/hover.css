@@ -1,9 +1,9 @@
-.btn:not(.tabbtn):not(.btn-fake):not(.centerbtn):hover {
+.btn:not(.tabbtn):not(.btn-fake):not(.centerbtn):not(.btn-hidden):hover {
 	width: 172px;
 	height: 82px;
 }
 
-.btn:not(.tabbtn):not(.btn-fake):not(.centerbtn):active {
+.btn:not(.tabbtn):not(.btn-fake):not(.centerbtn):not(.btn-hidden):active {
 	width: 165px;
 	height: 77.5px;
 }
