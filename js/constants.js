@@ -7,7 +7,7 @@ const upgradeInfo = {
 	16: ["Increase core production of x by 3.", 15, "x"],
 	17: ["."],
 	18: ["Triple all production.", 1e21, "x"],
-	19: ["Placeholder.", Infinity, "x"],
+	19: ["Septuple all production.", Infinity, "x"],
 
 	23: ["Multiply x production by 7.5.", 1e3, "x"],
 	24: ["Increase the production of x based on x.", 100, "x"],
@@ -15,7 +15,7 @@ const upgradeInfo = {
 	26: ["Increase core production of y by 4.", 15, "y"],
 	27: ["Multiply y production by 10.", 2.5e4, "x"],
 	28: ["Double all production.", 1e18, "x"],
-	29: ["Placeholder.", Infinity, "x"],
+	29: ["Sextuple all production.", 5e110, "x"],
 
 	33: ["Raise x production to the power of 1.25.", 6.25e6, "z"],
 	34: ["Multiply y production by 5.", 5e6, "z"],
@@ -94,25 +94,33 @@ const rebirthUpgradeInfo = {
 	52: ["invis", [0]],
 	53: ["invis", [0]],
 	54: ["invis", [0]],
-	55: ["Self Buff", [10]],
+	55: ["Self Buff", [10, 10]],
 
 	61: ["invis", [0]],
 	62: ["invis", [0]],
 	63: ["???", [1e13]],
 	64: ["invis", [0]],
-	65: ["More Upgrades", [7, 14]],
+	// actual cost: 14, will probably be higher later on.
+	// changed to 1e100 so people wont BUY IT >:(
+	65: ["More Upgrades", [7, 1e100]],
 
-	71: ["invis", [0]],
-	72: ["invis", [0]],
-	73: ["invis", [0]],
-	74: ["invis", [0]],
-	75: ["Upgrade Buff", [38, 35]],
+	71: ["invis", [Infinity]],
+	72: ["invis", [Infinity]],
+	73: ["invis", [Infinity]],
+	74: ["invis", [Infinity]],
+	75: ["Upgrade Buff", [36, 35]],
 
-	81: ["???", [1e100]],
-	82: ["???", [1e100]],
-	83: ["Core z", [1e100]],
+	81: ["Core y", [1e100]],
+	82: ["Exponential z", [35]],
+	83: ["Core z", [20, 30]],
 	84: ["Exponential y", [45, 15, 5]],
 	85: ["Rebirth Buff", [5]],
+
+	91: ["Core Buff", [1e100]],
+	92: ["invis", [Infinity]],
+	93: ["invis", [Infinity]],
+	94: ["invis", [Infinity]],
+	95: ["invis", [Infinity]],
 };
 
 const rebirthTooltips = {
@@ -146,7 +154,13 @@ const rebirthTooltips = {
 	65: "Unlock more upgrades on the main tree.",
 
 	75: "Gain a boost to production based on the amount of upgrades you have.",
-}
+
+	81: "Gain a boost to the core proudction of y.",
+	82: "Gain an exponential boost to the production of z.",
+	83: "Increase the core production of z.",
+	84: "Gain an exponential boost to y production.",
+	85: "Gain a boost to production based on the amount of rebirth upgrades you have.",
+};
 
 const rebirthRowInfo = Object.keys(rebirthUpgradeInfo)
 	.map(n => n[0])
@@ -247,11 +261,7 @@ const anotherUpgrades = {
 		"a",
 	],
 	13: ["never gonna give you up, get rique rol't!", 1e100, "a"],
-	14: [
-		"Gain the ability to say curse words on any Discord server.",
-		1e100,
-		"a",
-	],
+	14: ["Boost all production based on how many a's you have bought.", 4, "b"],
 	15: ["Remove all timewalls from OM.", 1e100, "a"],
 
 	16: [
@@ -283,7 +293,7 @@ const childList = {
 	25: [24],
 	26: [36, 27],
 	27: [17, 28],
-	28: [18, 38],
+	28: [18, 29, 38],
 	33: [43],
 	34: [33],
 	35: [45],
@@ -328,6 +338,7 @@ const rebirthChildList = {
 	55: [65],
 	65: [75],
 	75: [85],
+	81: [91],
 	82: [81],
 	83: [82],
 	84: [83],

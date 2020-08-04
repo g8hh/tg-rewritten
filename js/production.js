@@ -26,6 +26,7 @@ function recalcX() {
 		.mul(u.includes(23) ? 5 : 1)
 		.mul(u.includes(25) ? 2 : 1)
 		.mul(u.includes(28) ? 2 : 1)
+		.mul(u.includes(29) ? 6 : 1)
 		.pow(u.includes(33) ? 1.25 : 1)
 		.mul(u.includes(36) ? 5 : 1)
 		.mul(u.includes(38) ? 4 : 1)
@@ -40,9 +41,7 @@ function recalcX() {
 	if (r[75] >= 1) ata = ata.mul(1.75 ** u.length);
 	if (r[75] >= 2) ata = ata.mul(u.length ** 1.35);
 	if (r[85] >= 1)
-		ata = ata.mul(
-			Object.values(game.rupgrades).reduce((a, b) => a + b) ** 1.75
-		);
+		ata = ata.mul(Object.values(r).reduce((a, b) => a + b) ** 1.75);
 	if (a.includes(4)) ata = ata.mul(1e5);
 
 	return ata;
@@ -54,10 +53,13 @@ function recalcY() {
 	const a = game.aupgrades;
 	let ata = new D(1);
 
+	if (r[81] >= 1) ata = ata.add(5);
+
 	if (u.includes(18)) ata = ata.mul(3);
 	if (u.includes(26)) ata = ata.add(4);
 	if (u.includes(27)) ata = ata.mul(10);
 	if (u.includes(28)) ata = ata.mul(2);
+	if (u.includes(29)) ata = ata.mul(6);
 	if (u.includes(34)) ata = ata.mul(5);
 	if (u.includes(37)) ata = ata.mul(5);
 	if (u.includes(38)) ata = ata.mul(4);
@@ -79,10 +81,9 @@ function recalcY() {
 	if (r[84] >= 2) ata = ata.pow(game.aupgrades.includes(9) ? 1.1 : 1.05);
 	if (r[84] >= 3) ata = ata.pow(1.01);
 	if (r[85] >= 1)
-		ata = ata.mul(
-			Object.values(game.rupgrades).reduce((a, b) => a + b) ** 1.75
-		);
+		ata = ata.mul(Object.values(r).reduce((a, b) => a + b) ** 1.75);
 	if (a.includes(4)) ata = ata.mul(1e5);
+	if (a.includes(14)) ata = ata.mul(new D(2).pow(game.a.bought));
 
 	return ata;
 }
@@ -94,8 +95,12 @@ function recalcZ() {
 
 	let ata = new D(1);
 
+	if (r[83] >= 1) ata = ata.add(500);
+	if (r[83] >= 2) ata = ata.add(2000);
+
 	if (u.includes(18)) ata = ata.mul(3);
 	if (u.includes(28)) ata = ata.mul(2);
+	if (u.includes(29)) ata = ata.mul(6);
 	if (u.includes(38)) ata = ata.mul(4);
 	if (u.includes(39)) ata = ata.mul(5);
 	if (u.includes(48)) ata = ata.mul(2);
@@ -108,10 +113,9 @@ function recalcZ() {
 	if (r[42] >= 2) ata = ata.mul(25);
 	if (r[75] >= 1) ata = ata.mul(1.75 ** u.length);
 	if (r[75] >= 2) ata = ata.mul(u.length ** 1.35);
+	if (r[82] >= 1) ata = ata.pow(1.25);
 	if (r[85] >= 1)
-		ata = ata.mul(
-			Object.values(game.rupgrades).reduce((a, b) => a + b) ** 1.75
-		);
+		ata = ata.mul(Object.values(r).reduce((a, b) => a + b) ** 1.75);
 	if (a.includes(4)) ata = ata.mul(1e5);
 
 	return ata;
@@ -127,6 +131,7 @@ function recalcProd() {
 function tickCalcX() {
 	const u = game.upgrades;
 	const r = game.rupgrades;
+	const a = game.aupgrades;
 	let ata = new D(cache.x);
 
 	if (u.includes(24)) ata = ata.add(game.x.amount.add(1).log10());
@@ -144,6 +149,16 @@ function tickCalcX() {
 				(Math.log1p(game.y.amount.add(1).log10() + 1) + 1) *
 				(game.z.amount.add(1).log2() + 1)
 		);
+	if (r[55] >= 2)
+		ata = ata.mul(
+			new D(game.x.amount.add(1).log2())
+				.mul(game.y.amount.log10())
+				.mul(game.z.amount.log2())
+				.add(1)
+				.log2() + 1
+		);
+
+	if (a.includes(14)) ata = ata.mul(new D(2).pow(game.a.bought));
 
 	return ata;
 }
@@ -175,8 +190,17 @@ function tickCalcY() {
 				(Math.log1p(game.y.amount.add(1).log10() + 1) + 1) *
 				(game.z.amount.add(1).log2() + 1)
 		);
+	if (r[55] >= 2)
+		ata = ata.mul(
+			new D(game.x.amount.add(1).log2())
+				.mul(game.y.amount.log10())
+				.mul(game.z.amount.log2())
+				.add(1)
+				.log2() + 1
+		);
 
 	if (a.includes(1)) ata = ata.mul(game.x.amount.pow(0.1));
+	if (a.includes(14)) ata = ata.mul(new D(2).pow(game.a.bought));
 
 	return ata;
 }
@@ -184,6 +208,7 @@ function tickCalcY() {
 function tickCalcZ() {
 	const u = game.upgrades;
 	const r = game.rupgrades;
+	const a = game.aupgrades;
 	let ata = new D(cache.z);
 
 	if (u.includes(67)) ata = ata.mul(game.z.amount.add(1).log2() + 1);
@@ -200,6 +225,16 @@ function tickCalcZ() {
 				(Math.log1p(game.y.amount.add(1).log10() + 1) + 1) *
 				(game.z.amount.add(1).log2() + 1)
 		);
+	if (r[55] >= 2)
+		ata = ata.mul(
+			new D(game.x.amount.add(1).log2())
+				.mul(game.y.amount.log10())
+				.mul(game.z.amount.log2())
+				.add(1)
+				.log2() + 1
+		);
+
+	if (a.includes(14)) ata = ata.mul(new D(2).pow(game.a.bought));
 
 	return ata;
 }

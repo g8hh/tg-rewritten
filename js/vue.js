@@ -242,7 +242,7 @@ Cost: ${
 					case 13:
 						return buyCurrency(13, "y");
 					case 15:
-						return buyCurrency(13, "x");
+						return buyCurrency(15, "x");
 					case 17:
 						return rebirth();
 					case 47:

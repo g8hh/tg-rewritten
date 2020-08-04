@@ -1,42 +1,8 @@
 "use strict";
 
-cache.upgrades = [
-	13,
-	14,
-	15,
-	16,
-	18,
-	23,
-	24,
-	25,
-	26,
-	27,
-	28,
-	33,
-	34,
-	35,
-	36,
-	37,
-	38,
-	39,
-	43,
-	44,
-	45,
-	46,
-	47,
-	48,
-	49,
-	53,
-	55,
-	56,
-	57,
-	58,
-	63,
-	64,
-	65,
-	67,
-	68,
-];
+cache.upgrades = Object.keys(upgradeInfo).filter(
+	n => !["17", "54"].includes(n)
+);
 
 cache.preAthRupgrades = [11, 12, 13, 21, 22, 23, 31, 32, 33, 41, 42, 43];
 
@@ -51,10 +17,7 @@ cache.zUpgrades = cache.upgrades
 	.map(n => Number(n));
 
 function max() {
-	cache.upgrades.forEach(n => buybtn(n));
-	buyCurrency(15, "x");
-	buyCurrency(13, "y");
-	buyCurrency(47, "z");
+	cache.upgrades.forEach(n => app.clickHandler(n));
 	if (game.aupgrades.includes(2)) {
 		// max all rebirth
 		cache.preAthRupgrades.forEach(n => {

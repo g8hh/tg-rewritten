@@ -1,14 +1,8 @@
 /* eslint-disable no-unused-vars */
 "use strict";
 
-const canvas = document.getElementById("tree-canvas"),
-	rcanvas = document.getElementById("tree-canvas"),
-	tcanvas = document.getElementById("tree-canvas"),
-	acanvas = document.getElementById("tree-canvas");
-const ctx = canvas.getContext("2d"),
-	rctx = canvas.getContext("2d"),
-	tctx = canvas.getContext("2d"),
-	actx = canvas.getContext("2d");
+const canvas = document.getElementById("tree-canvas");
+const ctx = canvas.getContext("2d");
 
 function renderFocusedTree() {
 	switch ((game || { currentTab: 0 }).currentTab) {
@@ -90,23 +84,6 @@ function drawStudyTree(can) {
 }
 
 function drawTreeBranch(num1, num2, type) {
-	let ct;
-	switch (type) {
-		case "r":
-		case "c":
-			ct = rctx;
-			break;
-		case "t":
-			ct = tctx;
-			break;
-		case "a":
-			ct = actx;
-			break;
-		default:
-			// Edge case + Normal tree
-			ct = ctx;
-			break;
-	}
 	try {
 		const start = document
 			.getElementById(type + num1)
@@ -130,12 +107,12 @@ function drawTreeBranch(num1, num2, type) {
 			end.top +
 			(end.height / 2 + 0.5) +
 			(document.documentElement.scrollTop || document.body.scrollTop);
-		ct.lineWidth = 15;
-		ct.beginPath();
-		ct.strokeStyle = getStrokeColor();
-		ct.moveTo(x1, y1);
-		ct.lineTo(x2, y2);
-		ct.stroke();
+		ctx.lineWidth = 15;
+		ctx.beginPath();
+		ctx.strokeStyle = getStrokeColor();
+		ctx.moveTo(x1, y1);
+		ctx.lineTo(x2, y2);
+		ctx.stroke();
 	} catch (e) {
 		console.warn(
 			`Dude, rendering failed! ${e} Should probably remove tree branch for ${type}${num1}`

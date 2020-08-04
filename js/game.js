@@ -103,8 +103,6 @@ function buyCurrency(ele) {
 	if (!ele2.classList.contains("btn-unbought")) return;
 	game[costCurr].amount = game[costCurr].amount.sub(cost);
 	game.upgrades.push(id);
-	// In case the currency creates a newline
-	resizeCanvas("upg");
 	recalcProd();
 }
 
