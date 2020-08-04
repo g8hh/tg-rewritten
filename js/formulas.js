@@ -62,9 +62,10 @@ const formulas = {
 		return ata;
 	},
 	rupg33: () =>
-		new D(1)
+		"x" + new D(1)
 			.mul(game.rupgrades[33] >= 1 ? 1.25 : 1)
-			.mul(game.rupgrades[33] >= 2 ? 1.1 : 1),
+			.mul(game.rupgrades[33] >= 2 ? 1.1 : 1)
+			.toString(),
 	rupg41: () => {
 		if (game.rupgrades[41] >= 3) return "Formula has x, y, z, and y again";
 		if (game.rupgrades[41] >= 2) return "Formula has x, y, and z";
