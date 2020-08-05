@@ -45,7 +45,7 @@ function rawCalcRP() {
 		.mul(r[33] >= 1 ? 1.25 : 1)
 		.mul(r[33] >= 2 ? 1.1 : 1)
 		.mul(a.includes(3) ? 1.025 : 1)
-		.mul(rupg35Boost[r[35] || 0] ** Math.floor(game.z.amount.add(1).log10()))
+		.mul(rupg35Boost[r[35] || 0] ** Math.floor(game.z.amount.add(1).log10()), 1.4)
 		.sub(game.rp.total.div(1.5));
 }
 

@@ -224,6 +224,7 @@ Cost: ${
 					case 6:
 					case 7:
 					case 8:
+					case 9:
 						return game.aupgrades.includes(5);
 					default:
 						return true;

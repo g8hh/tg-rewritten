@@ -169,7 +169,7 @@ function tickCalcY() {
 	const a = game.aupgrades;
 	let ata = new D(cache.y);
 
-	if (u.includes(35)) ata = ata.mul(game.x.amount.pow(1 / 6) + 1);
+	if (u.includes(35)) ata = ata.mul(game.x.amount.pow(1 / 6).add(1));
 	if (u.includes(68))
 		ata = ata.mul(
 			(game.x.amount.add(1).log(1e3) + 1) *
