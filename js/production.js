@@ -5,7 +5,7 @@ const cache = { x: new D(0), y: new D(0), z: new D(0) };
 
 function recalcCoreX() {
 	const u = game.upgrades;
-	const r = game.rupgrades;
+	const r = game.inLab ? {} : game.rupgrades;
 	return new D(1)
 		.add(u.includes(14) ? 10 : 0)
 		.add(u.includes(16) ? 3 : 0)
@@ -17,8 +17,8 @@ function recalcCoreX() {
 
 function recalcX() {
 	const u = game.upgrades;
-	const r = game.rupgrades;
-	const a = game.aupgrades;
+	const r = game.inLab ? {} : game.rupgrades;
+	const a = game.inLab ? [] : game.aupgrades;
 	let ata = recalcCoreX();
 
 	ata = ata
@@ -49,8 +49,8 @@ function recalcX() {
 
 function recalcY() {
 	const u = game.upgrades;
-	const r = game.rupgrades;
-	const a = game.aupgrades;
+	const r = game.inLab ? {} : game.rupgrades;
+	const a = game.inLab ? [] : game.aupgrades;
 	let ata = new D(1);
 
 	if (r[81] >= 1) ata = ata.add(5);
@@ -90,8 +90,8 @@ function recalcY() {
 
 function recalcZ() {
 	const u = game.upgrades;
-	const r = game.rupgrades;
-	const a = game.aupgrades;
+	const r = game.inLab ? {} : game.rupgrades;
+	const a = game.inLab ? [] : game.aupgrades;
 
 	let ata = new D(1);
 
@@ -130,8 +130,8 @@ function recalcProd() {
 
 function tickCalcX() {
 	const u = game.upgrades;
-	const r = game.rupgrades;
-	const a = game.aupgrades;
+	const r = game.inLab ? {} : game.rupgrades;
+	const a = game.inLab ? [] : game.aupgrades;
 	let ata = new D(cache.x);
 
 	if (u.includes(24)) ata = ata.add(game.x.amount.add(1).log10());
@@ -165,8 +165,8 @@ function tickCalcX() {
 
 function tickCalcY() {
 	const u = game.upgrades;
-	const r = game.rupgrades;
-	const a = game.aupgrades;
+	const r = game.inLab ? {} : game.rupgrades;
+	const a = game.inLab ? [] : game.aupgrades;
 	let ata = new D(cache.y);
 
 	if (u.includes(35)) ata = ata.mul(game.x.amount.pow(1 / 6).add(1));
@@ -207,8 +207,8 @@ function tickCalcY() {
 
 function tickCalcZ() {
 	const u = game.upgrades;
-	const r = game.rupgrades;
-	const a = game.aupgrades;
+	const r = game.inLab ? {} : game.rupgrades;
+	const a = game.inLab ? [] : game.aupgrades;
 	let ata = new D(cache.z);
 
 	if (u.includes(67)) ata = ata.mul(game.z.amount.add(1).log2() + 1);

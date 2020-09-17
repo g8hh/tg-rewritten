@@ -29,6 +29,7 @@ const defaultGame = {
 	tab: [0, 0],
 	hover: true,
 	rebirthed: false,
+	inLab: false,
 	trialTreeUnlocked: false,
 	inTrial: 0,
 	// __only__ store completions, rest can be done with m a f s
@@ -41,7 +42,7 @@ const defaultGame = {
 
 var game = defaultGame;
 
-const tabs = ["upgrades", "rebirth", "another", "trial", "options"];
+const tabs = ["upgrades", "rebirth", "another", "lab", "options"];
 
 function showTab(no, updateCurrentTab = true) {
 	if (updateCurrentTab) game.currentTab = no;
@@ -71,7 +72,7 @@ function buybtn(ele) {
 	if (id >= 70 && game.rupgrades[65] < 2) return;
 	// i need this. i don't know why.
 	if (!ele2) return;
-	let cost = new D(upgradeInfo[id][1]).div(
+	let cost = game.inLab ? new D(labCosts[id]) : new D(upgradeInfo[id][1]).div(
 		costDiv[(game.rupgrades[13] || 0) + (game.rupgrades[45] || 0)]
 	);
 	const costCurr = upgradeInfo[id][2];
@@ -95,7 +96,7 @@ function buyCurrency(ele) {
 	if (typeof ele === "number") ele2 = document.getElementById(ele);
 	else ele2 = ele;
 	const id = Number(ele2.id);
-	let cost = new D(upgradeInfo[id][1]).div(costDiv[game.rupgrades[13] || 0]);
+	let cost = game.inLab ? new D(labCosts[id]) : new D(upgradeInfo[id][1]).div(costDiv[(game.rupgrades[13] || 0) + (game.rupgrades[45] || 0)]);
 	const costCurr = upgradeInfo[id][2];
 	if (game.upgrades.includes(id)) return;
 	if (cost.gt(game[costCurr].amount)) return;
@@ -124,24 +125,34 @@ function autobuy() {
 	if (game.rupgrades[15] >= 3) cache.zUpgrades.forEach(u => buybtn(u));
 }
 
+// big boye! only change if you're
+// trying to speed through the
+// game for testing
+let timeSpeed = 1;
+
 window.setInterval(() => {
 	const diff = Date.now() - game.lastTick;
 	game.lastTick = Date.now();
 	const u = game.upgrades;
 
-	if (u.includes(15))
-		game.x.amount = game.x.amount.add(tickCalcX().times(diff / 1000));
-	if (u.includes(13))
-		game.y.amount = game.y.amount.add(tickCalcY().times(diff / 1000));
-	if (u.includes(47))
-		game.z.amount = game.z.amount.add(tickCalcZ().times(diff / 1000));
+	if (u.includes(15)) {
+		let gain = tickCalcX()
+		if (game.inLab) gain = gain.pow(2)
+		game.x.amount = game.x.amount.add(gain.times(diff / 1000).times(timeSpeed));
+	}
+	if (u.includes(13)) {
+		let gain = tickCalcY()
+		if (game.inLab) gain = gain.pow(2)
+		game.y.amount = game.y.amount.add(gain.times(diff / 1000).times(timeSpeed));
+	}
+	if (u.includes(47)) {
+		let gain = tickCalcZ()
+		if (game.inLab) gain = gain.pow(2)
+		game.z.amount = game.z.amount.add(gain.times(diff / 1000).times(timeSpeed));
+	}
 
 	autobuy();
 	update();
-
-	// 1% gain
-	// if (game.rupgrades.includes(43))
-	// game.rp.amount = game.rp.amount.add(calcRP().div(100).times(diff / 1000));
 }, 100);
 
 // Save loop

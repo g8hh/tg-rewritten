@@ -18,17 +18,6 @@ cache.zUpgrades = cache.upgrades
 
 function max() {
 	cache.upgrades.forEach(n => app.clickHandler(n));
-	if (game.aupgrades.includes(2)) {
-		// max all rebirth
-		cache.preAthRupgrades.forEach(n => {
-			for (
-				let i = game.rupgrades[n] || 0;
-				i < rebirthUpgradeInfo[n][1].length;
-				i++
-			)
-				buyreb(n);
-		});
-	}
 }
 
 function goLeft() {

@@ -6,17 +6,21 @@ const ctx = canvas.getContext("2d");
 
 function renderFocusedTree() {
 	switch ((game || { currentTab: 0 }).currentTab) {
+		case 0:
+			resizeCanvas("upg");
+			break;
 		case 1:
 			resizeCanvas("reb");
 			break;
 		case 2:
 			resizeCanvas("ath");
 			break;
-		case 3:
-			resizeCanvas("tri");
-			break;
 		default:
-			resizeCanvas("upg");
+			canvas.width = 0;
+			canvas.height = 0;
+			canvas.width = document.body.scrollWidth;
+			canvas.height = document.body.scrollHeight;
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			break;
 	}
 }

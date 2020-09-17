@@ -3,11 +3,8 @@
 function rebirth(warning = true) {
 	// Wooow
 	const gain = calcRP();
-	if (
-		game.inTrial !== 0 ||
-		document.getElementById(17).classList.contains("btn-locked")
-	)
-		return;
+	if (document.getElementById(17).classList.contains("btn-locked")) return;
+	if (game.inLab) return;
 	if (gain.lt(1) && warning)
 		if (
 			!confirm(
@@ -45,7 +42,10 @@ function rawCalcRP() {
 		.mul(r[33] >= 1 ? 1.25 : 1)
 		.mul(r[33] >= 2 ? 1.1 : 1)
 		.mul(a.includes(3) ? 1.025 : 1)
-		.mul(rupg35Boost[r[35] || 0] ** Math.floor(game.z.amount.add(1).log10()), 1.4)
+		.mul(
+			rupg35Boost[r[35] || 0] ** Math.floor(game.z.amount.add(1).log10()),
+			1.4
+		)
 		.sub(game.rp.total.div(1.5));
 }
 
@@ -90,7 +90,28 @@ function respecRebirthTree() {
 		)
 	)
 		return;
-	game.rupgrades = game.rupgrades[14] >= 1 ? { 14: 1 } : {};
-	game.rp.amount = game.rp.total;
+	if (game.rupgrades[14] >= 1) {
+		game.rp.amount = game.rp.total.sub(79);
+		const r = rebirthUpgradeInfo;
+		// TODO find a better way to do this?
+		game.rupgrades = {
+			11: r[11][1].length,
+			12: r[12][1].length,
+			13: r[13][1].length,
+			14: 1,
+			21: r[21][1].length,
+			22: r[22][1].length,
+			23: r[23][1].length,
+			31: r[31][1].length,
+			32: r[32][1].length,
+			33: r[33][1].length,
+			41: r[41][1].length,
+			42: r[42][1].length,
+			43: r[43][1].length,
+		};
+	} else {
+		game.rupgrades = {};
+		game.rp.amount = game.rp.total;
+	}
 	rebirth(false);
 }

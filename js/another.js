@@ -43,6 +43,7 @@ const athCosts = {
 const athNames = ["a", "b", "c"];
 
 function buyAthCurrency(curr) {
+	if (!game.rupgrades[14]) return;
 	if (game.rp.total.lt(athCosts[curr]())) return;
 	game[curr].amount = game[curr].amount.add(1);
 	game[curr].bought = game[curr].bought.add(1);

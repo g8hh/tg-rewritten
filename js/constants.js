@@ -90,16 +90,16 @@ const rebirthUpgradeInfo = {
 	44: [".", [1e100]],
 	45: ["Even Cheaper Upgrades", [25, 1e100]],
 
-	51: ["invis", [0]],
-	52: ["invis", [0]],
-	53: ["invis", [0]],
-	54: ["invis", [0]],
+	51: ["invis", [Infinity]],
+	52: ["invis", [Infinity]],
+	53: ["invis", [Infinity]],
+	54: ["invis", [Infinity]],
 	55: ["Self Buff", [10, 10]],
 
-	61: ["invis", [0]],
-	62: ["invis", [0]],
-	63: ["???", [1e13]],
-	64: ["invis", [0]],
+	61: ["invis", [Infinity]],
+	62: ["invis", [Infinity]],
+	63: ["???", [600]],
+	64: ["invis", [Infinity]],
 	// actual cost: 14, will probably be higher later on.
 	// changed to 1e100 so people wont BUY IT >:(
 	65: ["More Upgrades", [7, 1e100]],
@@ -170,6 +170,56 @@ rebirthRowInfo.unshift(null);
 
 // Last one could be janky
 const costDiv = [1, 2, 5, 25, 100, 5e7, 1e50];
+
+const labCosts = {
+	13: 2.5e5,
+	14: 1000,
+	15: 0,
+	16: 250,
+	17: Infinity,
+	18: Infinity,
+	19: Infinity,
+
+	23: 2e4,
+	24: 75,
+	25: 15,
+	26: 10,
+	27: 1e6,
+	28: Infinity,
+	29: Infinity,
+
+	33: Infinity,
+	34: Infinity,
+	35: 5,
+	36: 5e4,
+	37: 1e7,
+	38: Infinity,
+	39: Infinity,
+
+	43: Infinity,
+	44: Infinity,
+	45: Infinity,
+	46: 1e6,
+	47: 1e9,
+	48: Infinity,
+	49: Infinity,
+
+	53: Infinity,
+	54: Infinity,
+	55: Infinity,
+	56: Infinity,
+	57: Infinity,
+	58: Infinity,
+	59: Infinity,
+
+	63: Infinity,
+	64: Infinity,
+	65: Infinity,
+	66: Infinity,
+	67: Infinity,
+	68: Infinity,
+	69: Infinity,
+};
 
 let choiceUpgrades = {
 	start: 1,

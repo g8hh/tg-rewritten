@@ -33,7 +33,7 @@ It is licensed under the MIT lscense and made by Yhvr.
 			<button class="btn tabbtn" id="upgrades" onclick="showTab(0)">Upgrade Tree</button>
 			<button class="btn tabbtn" id="rebirth" onclick="showTab(1)" v-if="game.rebirthed">Rebirth Tree</button>
 			<button class="btn tabbtn" id="another" onclick="showTab(2)" v-if="game.rupgrades[14] > 0">Another Tree</button>
-			<button class="btn tabbtn" id="trial" onclick="showTab(3)" style="display:none;">Trial Tree</button>
+			<button class="btn tabbtn" id="thelab" onclick="showTab(3)" v-if="game.rupgrades[63] > 0">The Lab</button>
 			<button class="btn tabbtn" id="options" onclick="showTab(4)">Options</button>
 		</div>
 		<div id="currencies">
@@ -44,6 +44,7 @@ It is licensed under the MIT lscense and made by Yhvr.
 			<span id="a" v-if="game.rupgrades[14] > 0">{{ format(game.a.amount) }}&hairsp;a</span>
 			<span id="b" v-if="game.b.bought.gte(1)">{{ format(game.b.amount) }}&hairsp;b</span>
 			<span id="c" v-if="game.c.bought.gte(1)">{{ format(game.c.amount) }}&hairsp;c</span>
+			<span id="sp" v-if="game.rupgrades[63] > 0">{{ format(game.sciencePoints.amount) }}&hairsp;SP</span>
 		</div>
 		<div id="center-btns">
 			<button class="btn centerbtn" onclick="max()">Max All (m)</button>
@@ -123,31 +124,32 @@ It is licensed under the MIT lscense and made by Yhvr.
 	</div>
 
 
-	<div id="trialTab" class="tab">
-		<table class="table">
-			<tr>
-				<td><button class="btn btn-trial" id="t0" onclick="enterTrial(1)">.</button></td>
-				<td><button class="btn btn-trial" id="t1" onclick="enterTrial(2)">.</button></td>
-				<td><button class="btn btn-trial" id="t2" onclick="enterTrial(3)">.</button></td>
-				<td><button class="btn btn-trial" id="t3" onclick="enterTrial(4)">.</button></td>
-				<td><button class="btn btn-trial" id="t8" onclick="completeTrial()">Copmlete the trial.</button></td>
-			</tr>
-			<tr>
-				<td><button class="btn btn-trial" id="t4" onclick="enterTrial(5)">.</button></td>
-				<td><button class="btn btn-trial" id="t5" onclick="enterTrial(6)">.</button></td>
-				<td><button class="btn btn-trial" id="t6" onclick="enterTrial(7)">.</button></td>
-				<td><button class="btn btn-trial" id="t7" onclick="enterTrial(8)">.</button></td>
-				<td><button class="btn btn-trial" id="t9" onclick="exitTrial()">Exit the trial.</button></td>
-			</tr>
-		</table>
-		<p style="text-align: center;"><em>You can do trials in any order. Complete a trial multiple times for a greater bonus.</em></p>
+	<div id="labTab" class="tab" style="text-align: center;">
+		<button class="btn" onclick="enterExitLab()" tooltip="Square all production, but Rebirth and Another Upgrades have no effect.">
+			{{ game.inLab ? "Exit" : "Enter" }} The Lab.
+			<span v-if="game.inLab"><br>Exit for {{ format(getSPGain()) }} Science Points</span>
+		</button><br>
+		<div class="research-path">
+			<h3>Production Route</h3>
+			<p>biger nujmbger<br>cost: 5</p>
+			<button class="btn tabbtn">please</button>
+		</div>
+		<div class="research-path">
+			<h3>Content Route</h3>
+			<p>next prestige layer<br>cost: ∞</p>
+			<button class="btn tabbtn">buy</button>
+		</div><div class="research-path">
+			<h3>Automation Route</h3>
+			<p>laziness<br>cost: -2</p>
+			<button class="btn tabbtn">max all</button>
+		</div>
 	</div>
 
 
 	<div id="optionsTab" class="tab"> <!-- Options Tab-->
 		<div>
 			<button class="btn" onclick="changeTheme()" tooltip="How your game looks.">Change Theme<br>Currently <span id="theme">Light</span>.</button>
-			<div class="btn btn-fake"><span>Change Notation<br><select id="notation" onchange="changeNotation(this.value)" v-model="game.notation">
+			<div class="btn btn-fake"><span>Change Notation<br><select id="notation" v-model="game.notation">
 				<option :value="index" v-for="(notation, index) in notations">{{ fancyNotations[index] || notation }}</option>
 			</select></span></div>
 			<button class="btn" onclick="changeTabPrefix()" tooltip='How the "Tree Game" games title in your browser tab looks.'>Change Tab Bar Prefix<br>Currently <span id="tabbarprefix">Long</span>.</button>
@@ -227,6 +229,8 @@ It is licensed under the MIT lscense and made by Yhvr.
 	<script type="text/javascript" src="js/choice.js"></script>
 	<script type="text/javascript" src="js/trial.js"></script>
 	<script type="text/javascript" src="js/another.js"></script>
+	<script type="text/javascript" src="js/research.js"></script>
+	<script type="text/javascript" src="js/vue/rebirth.js"></script>
 	<script type="text/javascript" src="js/vue.js"></script>
 	<script type="text/javascript" src="js/shorthand.js"></script>
 	<script type="text/javascript" src="js/game.js" onload="init()"></script>

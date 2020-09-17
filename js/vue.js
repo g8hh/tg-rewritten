@@ -13,42 +13,35 @@ function initVue() {
 			game,
 			format: n => not.format(n, 2, 0),
 			upg(n) {
-				switch (n) {
-					case "54":
+				switch (Number(n)) {
+					case 54:
 						return "pogger button";
-					case "17":
-						return `Rebirth.<br>
-			${
-				rawCalcRP().lt(1)
-					? `<span>in ${not.format(
-							rawCalcRP().sub(1).abs(),
-							2,
-							2
-					  )} RP<br></span>`
-					: ""
-			}
-			${
-				rawCalcRP().gte(1)
-					? `<span>next in ${not.format(
-							1 - rawCalcRP().mod(1).toNumber(),
-							2,
-							2
-					  )} RP<br></span>`
-					: ""
-			}
-			${this.format(calcRP())}&hairsp;RP`;
+					case 17:
+						if (game.inLab) return `Nothing to see here...`;
+						let out = "Rebirth.<br>";
+						const RP = rawCalcRP();
+						if (RP.lt(1))
+							out += `in ${this.format(
+								RP.sub(1).abs()
+							)}&hairsp;RP`;
+						else
+							out += `next in ${this.format(
+								new D(1).sub(RP.mod(1))
+							)}&harisp;RP`;
+						out += `<br>${this.format(RP.max(0))}&hairsp;RP`;
+						return out;
+					case 15:
+						return "Start the game.<br>Cost: Free";
 					default:
-						return `${upgradeInfo[n][0]}<br>Cost: ${
-							upgradeInfo[n][1] === 0
-								? "Free"
-								: `${this.format(
-										upgradeInfo[n][1] /
-											costDiv[
-												(game.rupgrades[13] || 0) +
-													(game.rupgrades[45] || 0)
-											]
-								  )}&hairsp;${upgradeInfo[n][2]}`
-						}`;
+						return `${upgradeInfo[n][0]}<br>Cost: ${this.format(
+							game.inLab
+								? labCosts[n]
+								: upgradeInfo[n][1] /
+										costDiv[
+											(game.rupgrades[13] || 0) +
+												(game.rupgrades[45] || 0)
+										]
+						)}&hairsp;${upgradeInfo[n][2]}`;
 				}
 			},
 			rpg(n) {
@@ -56,18 +49,18 @@ function initVue() {
 				switch (Number(n)) {
 					case 14:
 						out = `Content Expansion
-Cost: ${not.format(
-							85,
-							2,
-							0
-						)} Total RP`;
+Cost: ${not.format(85, 2, 0)} Total RP`;
+						break;
+					case 63:
+						out = `Unlock The Lab.
+Cost: ${not.format(470, 2, 0)} Total RP`;
 						break;
 					case 24:
 					case 34:
 					case 44:
 						const name = athNames[Math.floor(n / 10) - 2];
 						out = `Buy a${name === "a" ? "n" : ""} ${name}.
-Cost: ${this.format(athCosts[name]())} Total RP`
+Cost: ${this.format(athCosts[name]())} Total RP`;
 						break;
 					default:
 						if (
@@ -88,10 +81,7 @@ Maxed!`;
 				}
 				if (formulas[`rupg${n}`])
 					out += `
-Currently: ${this.formatFormula(
-						formulas[`rupg${n}`](),
-						n
-					)}`;
+Currently: ${this.formatFormula(formulas[`rupg${n}`](), n)}`;
 				return out;
 			},
 			apg(n) {
@@ -134,74 +124,7 @@ Cost: ${
 						.filter(a => Boolean(a))
 						.filter(a => a.includes(n)).length === 0 && n !== 15,
 			}),
-			rclass: n => {
-				switch (n) {
-					case 15:
-						return {
-							btn: true,
-							"btn-rebirth-bought":
-								(game.rupgrades[15] || 0) >=
-								rebirthUpgradeInfo[15][1].length,
-							"btn-rebirth-unbought":
-								((game.rupgrades[15] || 0) > 0 ||
-									Object.values(game.rupgrades).reduce(
-										(a, b) => a + b
-									) >= 33) &&
-								(game.rupgrades[15] || 0) <
-									rebirthUpgradeInfo[15][1].length,
-							"btn-rebirth-locked":
-								Object.values(game.rupgrades).reduce(
-									(a, b) => a + b
-								) < 33,
-						};
-					case 24:
-						return {
-							btn: true,
-							"btn-rebirth-unbought": game.rupgrades[14] >= 1,
-							"btn-rebirth-locked": (game.rupgrades[14] || 0) < 1,
-						};
-					case 34:
-						return {
-							btn: true,
-							"btn-rebirth-unbought": game.a.bought >= 1,
-							"btn-rebirth-locked": game.a.bought < 1,
-						};
-					case 44:
-						return {
-							btn: true,
-							"btn-rebirth-unbought": game.b.bought >= 1,
-							"btn-rebirth-locked": game.b.bought < 1,
-						};
-					default:
-						try {
-							const out = {
-								btn: true,
-								"btn-rebirth-bought":
-									game.rupgrades[n] >=
-									rebirthUpgradeInfo[n][1].length,
-								"btn-rebirth-unbought":
-									game.rupgrades[n] >= 1 ||
-									(Object.keys(game.rupgrades) || [1])
-										.map(a => rebirthChildList[a] || [1])
-										.reduce((a, b) => (a || []).concat(b))
-										.includes(n) ||
-									n === 11,
-								"btn-hidden": rebirthUpgradeInfo[n][0] === "invis"
-							};
-							out["btn-rebirth-locked"] = !out[
-								"btn-rebirth-unbought"
-							];
-
-							return out;
-						} catch (e) {
-							return {
-								btn: true,
-								"btn-rebirth-unbought": n === 11,
-								"btn-rebirth-locked": n !== 11,
-							};
-						}
-				}
-			},
+			rclass,
 			showRow: n => {
 				switch (Math.floor(n / 10)) {
 					case 7:
@@ -218,26 +141,8 @@ Cost: ${
 						return true;
 				}
 			},
-			showRebirthRow: n => {
-				switch (Math.floor(n / 10)) {
-					case 5:
-					case 6:
-					case 7:
-					case 8:
-					case 9:
-						return game.aupgrades.includes(5);
-					default:
-						return true;
-				}
-			},
-			showRebirthCol: n => {
-				switch (n % 10) {
-					case 5:
-						return game.aupgrades.includes(2);
-					default:
-						return true;
-				}
-			},
+			showRebirthRow,
+			showRebirthCol,
 			clickHandler: n => {
 				switch (Number(n)) {
 					case 13:
@@ -254,21 +159,9 @@ Cost: ${
 						return buybtn(Number(n));
 				}
 			},
-			rebirthClickHandler: n => {
-				switch (Number(n)) {
-					case 14:
-						return buyAthTree();
-					case 24:
-						return buyAthCurrency("a");
-					case 34:
-						return buyAthCurrency("b");
-					case 44:
-						return buyAthCurrency("c");
-					default:
-						return buyreb(Number(n));
-				}
-			},
+			rebirthClickHandler,
 			rebirthTooltip: n => rebirthTooltips[n],
+			getSPGain,
 		},
 	});
 }

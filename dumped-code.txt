@@ -207,3 +207,101 @@ function updateChoiceUpgrades() {
 		drawTreeBranch(112, 122, "c");
 		drawTreeBranch(113, 122, "c");
 	}
+
+
+
+
+
+
+
+
+
+
+/*
+0 1 2 3 8
+4 5 6 7 9
+*/
+
+.btn-trial {
+	color: black;
+}
+
+#t0 {
+	background-color: #ff0000;
+}
+#t1,
+#t4 {
+	background-color: #ff8800;
+}
+#t2,
+#t5 {
+	background-color: #ffff00;
+}
+#t3,
+#t6 {
+	background-color: #88ff00;
+}
+#t8,
+#t7 {
+	background-color: #00ff88;
+}
+#t9 {
+	background-color: #00ffff;
+}
+
+
+
+
+
+
+
+
+
+
+.btn-cleft-bought {
+	background-color: red;
+}
+
+.btn-cleft-unbought {
+	background-color: rgb(190, 0, 0);
+}
+
+.btn-cleft-locked {
+	background-color: rgb(100, 0, 0);
+}
+
+.btn-cmid-bought {
+	background-color: rgb(0, 255, 0);
+}
+
+.btn-cmid-unbought {
+	background-color: rgb(0, 190, 0);
+}
+
+.btn-cmid-locked {
+	background-color: rgb(0, 100, 0);
+}
+
+.btn-cright-bought {
+	background-color: blue;
+}
+
+.btn-cright-unbought {
+	background-color: rgb(0, 0, 190);
+}
+
+.btn-cright-locked {
+	background-color: rgb(0, 0, 100);
+}
+
+.btn-creg-bought {
+	background-color: yellow;
+}
+
+.btn-creg-unbought {
+	background-color: rgb(190, 190, 0);
+}
+
+.btn-creg-locked {
+	background-color: rgb(100, 100, 0);
+}

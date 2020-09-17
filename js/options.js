@@ -2,7 +2,19 @@
 
 // Create datasets
 const themes = ["Light", "Dark", "Auto", "Strange"];
-const notations = ["Scientific", "Engineering", "MixedScientific", "MixedEngineering", "Logarithm", "Letters", "Standard", "Dots", "Clock", "Bar", "Blind"];
+const notations = [
+	"Scientific",
+	"Engineering",
+	"MixedScientific",
+	"MixedEngineering",
+	"Logarithm",
+	"Letters",
+	"Standard",
+	"Dots",
+	"Clock",
+	"Bar",
+	"Blind",
+];
 const TABBAR_PREFIX = ["Tree Game | ", "TG | ", ""];
 const TABBAR_PREFIX_FANCY = ["Long", "Short", "None"];
 const TABBAR_SUFFIX_FANCY = ["x", "y", "z", "RP", "RP Gain"];
@@ -30,18 +42,22 @@ function fetchTabbarValue() {
 			x[1] = TABBAR_SUFFIX_FANCY[0];
 	}
 	return x;
-};
+}
 
 function changeTheme() {
 	game.theme++;
 	if (game.theme === themes.length) game.theme = 0;
-	document.getElementById("themecss").href = `themes/${themes[game.theme]}.css`;
+	document.getElementById("themecss").href = `themes/${
+		themes[game.theme]
+	}.css`;
 	document.getElementById("theme").textContent = themes[game.theme];
 }
 
 function toggleHover() {
 	game.hover = !game.hover;
-	document.getElementById("hovercss").href = game.hover ? "themes/hover.css" : "";
+	document.getElementById("hovercss").href = game.hover
+		? "themes/hover.css"
+		: "";
 }
 
 function changeNotation(n) {
@@ -52,28 +68,27 @@ function changeNotation(n) {
 function changeTabPrefix() {
 	game.tab[0]++;
 	if (game.tab[0] === TABBAR_PREFIX.length) game.tab[0] = 0;
-	document.getElementById("tabbarprefix").textContent = TABBAR_PREFIX_FANCY[game.tab[0]];
+	document.getElementById("tabbarprefix").textContent =
+		TABBAR_PREFIX_FANCY[game.tab[0]];
 }
 
 function changeTabSuffix() {
 	const length = game.rebirthed ? TABBAR_SUFFIX_FANCY.length : 3;
 	game.tab[1]++;
 	if (game.tab[1] === length) game.tab[1] = 0;
-	document.getElementById("tabbarsuffix").textContent = TABBAR_SUFFIX_FANCY[game.tab[1]];
+	document.getElementById("tabbarsuffix").textContent =
+		TABBAR_SUFFIX_FANCY[game.tab[1]];
 }
 
 // Recursively convert "Decimal" to string
 function decimalToString(obj) {
 	const data = {};
 	for (const key in obj) {
-		if (obj[key] instanceof D)
-			data[key] = obj[key].toString();
-		else if (obj[key] instanceof Array)
-			data[key] = obj[key];
+		if (obj[key] instanceof D) data[key] = obj[key].toString();
+		else if (obj[key] instanceof Array) data[key] = obj[key];
 		else if (obj[key] instanceof Object)
 			data[key] = decimalToString(obj[key]);
-		else
-			data[key] = obj[key];
+		else data[key] = obj[key];
 	}
 	return data;
 }
@@ -82,14 +97,11 @@ function decimalToString(obj) {
 function stringToDecimal(obj) {
 	const data = {};
 	for (const key in obj) {
-		if (typeof obj[key] === "string")
-			data[key] = new D(obj[key]);
-		else if (obj[key] instanceof Array)
-			data[key] = obj[key];
+		if (typeof obj[key] === "string") data[key] = new D(obj[key]);
+		else if (obj[key] instanceof Array) data[key] = obj[key];
 		else if (obj[key] instanceof Object)
 			data[key] = stringToDecimal(obj[key]);
-		else
-			data[key] = obj[key];
+		else data[key] = obj[key];
 	}
 	return data;
 }
@@ -106,51 +118,89 @@ function preloadChoiceTree() {
 	const sides = [undefined, "left", "mid", "right"];
 	for (let i = 1; i < game.choice.depth + 1; i++) {
 		if (choiceCosts[i - 1].eq(0)) {
-			document.getElementById(`c${i}2`).classList.remove("btn-creg-locked");
+			document
+				.getElementById(`c${i}2`)
+				.classList.remove("btn-creg-locked");
 			document.getElementById(`c${i}2`).classList.add("btn-creg-bought");
 		} else {
 			const c = game.choice.choices[Math.floor(i / 2)];
-			document.getElementById(`c${i}${c}`).classList.remove(`btn-c${sides[c]}-locked`);
-			document.getElementById(`c${i}${c}`).classList.remove(`btn-c${sides[c]}-unbought`);
-			document.getElementById(`c${i}${c}`).classList.add(`btn-c${sides[c]}-bought`);
+			document
+				.getElementById(`c${i}${c}`)
+				.classList.remove(`btn-c${sides[c]}-locked`);
+			document
+				.getElementById(`c${i}${c}`)
+				.classList.remove(`btn-c${sides[c]}-unbought`);
+			document
+				.getElementById(`c${i}${c}`)
+				.classList.add(`btn-c${sides[c]}-bought`);
 			if (c !== 1) {
-				document.getElementById(`c${i}1`).classList.remove("btn-cleft-unbought");
-				document.getElementById(`c${i}1`).classList.add("btn-cleft-locked");
-				}
+				document
+					.getElementById(`c${i}1`)
+					.classList.remove("btn-cleft-unbought");
+				document
+					.getElementById(`c${i}1`)
+					.classList.add("btn-cleft-locked");
+			}
 			if (c !== 2) {
-				document.getElementById(`c${i}2`).classList.remove("btn-cmid-unbought");
-				document.getElementById(`c${i}2`).classList.add("btn-cmid-locked");
-				}
+				document
+					.getElementById(`c${i}2`)
+					.classList.remove("btn-cmid-unbought");
+				document
+					.getElementById(`c${i}2`)
+					.classList.add("btn-cmid-locked");
+			}
 			if (c !== 3) {
-				document.getElementById(`c${i}3`).classList.remove("btn-cright-unbought");
-				document.getElementById(`c${i}3`).classList.add("btn-cright-locked");
-				}
+				document
+					.getElementById(`c${i}3`)
+					.classList.remove("btn-cright-unbought");
+				document
+					.getElementById(`c${i}3`)
+					.classList.add("btn-cright-locked");
+			}
 		}
 	}
 	if (choiceCosts[game.choice.depth].eq(0)) {
 		const next = game.choice.depth + 1;
-		document.getElementById(`c${next}2`).classList.remove("btn-creg-locked");
+		document
+			.getElementById(`c${next}2`)
+			.classList.remove("btn-creg-locked");
 		document.getElementById(`c${next}2`).classList.add("btn-creg-unbought");
 	} else if (game.choice.depth !== 0) {
-		document.getElementById(`c${next}1`).classList.remove("btn-cleft-locked");
-		document.getElementById(`c${next}1`).classList.add("btn-cleft-unbought");
-		document.getElementById(`c${next}2`).classList.remove("btn-cmid-locked");
+		document
+			.getElementById(`c${next}1`)
+			.classList.remove("btn-cleft-locked");
+		document
+			.getElementById(`c${next}1`)
+			.classList.add("btn-cleft-unbought");
+		document
+			.getElementById(`c${next}2`)
+			.classList.remove("btn-cmid-locked");
 		document.getElementById(`c${next}2`).classList.add("btn-cmid-unbought");
-		document.getElementById(`c${next}3`).classList.remove("btn-cright-locked");
-		document.getElementById(`c${next}3`).classList.add("btn-cright-unbought");
+		document
+			.getElementById(`c${next}3`)
+			.classList.remove("btn-cright-locked");
+		document
+			.getElementById(`c${next}3`)
+			.classList.add("btn-cright-unbought");
 	}
 	if (game.choice.depth > 0) {
 		const fc = game.choice.choices[0];
 		if (fc !== 1) {
-			document.getElementById("c11").classList.remove("btn-cleft-unbought");
+			document
+				.getElementById("c11")
+				.classList.remove("btn-cleft-unbought");
 			document.getElementById("c11").classList.add("btn-cleft-locked");
 		}
 		if (fc !== 2) {
-			document.getElementById("c12").classList.remove("btn-cmid-unbought");
+			document
+				.getElementById("c12")
+				.classList.remove("btn-cmid-unbought");
 			document.getElementById("c12").classList.add("btn-cmid-locked");
 		}
 		if (fc !== 3) {
-			document.getElementById("c13").classList.remove("btn-cright-unbought");
+			document
+				.getElementById("c13")
+				.classList.remove("btn-cright-unbought");
 			document.getElementById("c13").classList.add("btn-cright-locked");
 		}
 	}
@@ -182,8 +232,12 @@ function load() {
 	// Account for old versions
 	if (sav.version <= 8) {
 		// PURGE
-		alert("Due to a total rebalance of the game, everything has been reset. Sorry for the inconvenience.");
-		alert("While you're at it, why don't you join the Discord server? Link is in the options.");
+		alert(
+			"Due to a total rebalance of the game, everything has been reset. Sorry for the inconvenience."
+		);
+		alert(
+			"While you're at it, why don't you join the Discord server? Link is in the options."
+		);
 		sav = defaultGame;
 	}
 	if (sav.notation instanceof D) sav.notation = sav.notation.toNumber();
@@ -195,6 +249,13 @@ function load() {
 	$("#tabbarprefix").textContent = TABBAR_PREFIX_FANCY[game.tab[0]];
 	$("#tabbarsuffix").textContent = TABBAR_SUFFIX_FANCY[game.tab[1]];
 	if (!game.hover) document.getElementById("hovercss").href = "";
+	if (game.inLab === undefined) {
+		game.inLab = false;
+		game.sciencePoints = {
+			amount: new D(0),
+			total: new D(0),
+		};
+	}
 	preloadAthTree();
 
 	update();
@@ -219,7 +280,7 @@ function importGame() {
 function resetGame() {
 	if (!confirm("Are you sure?")) return;
 	if (!confirm("This is a hard reset. There is no reward!")) return;
-	if (prompt("Type \"yes\" to delete your save.") !== "yes") return;
+	if (prompt('Type "yes" to delete your save.') !== "yes") return;
 	localStorage.removeItem("treegamebetasave");
 	localStorage.removeItem("treegamebetasavebackup");
 	window.location.reload();
