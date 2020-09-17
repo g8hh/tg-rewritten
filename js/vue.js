@@ -23,7 +23,7 @@ function initVue() {
 						if (RP.lt(1))
 							out += `in ${this.format(
 								RP.sub(1).abs()
-							)}&hairspRP`;
+							)}&hairsp;RP`;
 						else
 							out += `next in ${this.format(
 								new D(1).sub(RP.mod(1))
