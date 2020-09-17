@@ -23,11 +23,11 @@ function initVue() {
 						if (RP.lt(1))
 							out += `in ${this.format(
 								RP.sub(1).abs()
-							)} RP`;
+							)}&hairspRP`;
 						else
 							out += `next in ${this.format(
 								new D(1).sub(RP.mod(1))
-							)}&harisp;RP`;
+							)}&hairsp;RP`;
 						out += `<br>${this.format(RP.max(0))}&hairsp;RP`;
 						return out;
 					case 15:
