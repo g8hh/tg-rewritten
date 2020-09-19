@@ -41,7 +41,7 @@ function recalcX() {
 	if (r[75] >= 1) ata = ata.mul(1.75 ** u.length);
 	if (r[75] >= 2) ata = ata.mul(u.length ** 1.35);
 	if (r[85] >= 1)
-		ata = ata.mul(Object.values(r).reduce((a, b) => a + b) ** 1.75);
+		ata = ata.mul(Object.values(r).reduce((b, c) => b + c) ** 1.75);
 	if (a.includes(4)) ata = ata.mul(1e5);
 
 	return ata;
@@ -81,7 +81,7 @@ function recalcY() {
 	if (r[84] >= 2) ata = ata.pow(game.aupgrades.includes(9) ? 1.1 : 1.05);
 	if (r[84] >= 3) ata = ata.pow(1.01);
 	if (r[85] >= 1)
-		ata = ata.mul(Object.values(r).reduce((a, b) => a + b) ** 1.75);
+		ata = ata.mul(Object.values(r).reduce((b, c) => b + c) ** 1.75);
 	if (a.includes(4)) ata = ata.mul(1e5);
 	if (a.includes(14)) ata = ata.mul(new D(2).pow(game.a.bought));
 
@@ -115,7 +115,7 @@ function recalcZ() {
 	if (r[75] >= 2) ata = ata.mul(u.length ** 1.35);
 	if (r[82] >= 1) ata = ata.pow(1.25);
 	if (r[85] >= 1)
-		ata = ata.mul(Object.values(r).reduce((a, b) => a + b) ** 1.75);
+		ata = ata.mul(Object.values(r).reduce((b, c) => b + c) ** 1.75);
 	if (a.includes(4)) ata = ata.mul(1e5);
 
 	return ata;

@@ -3,8 +3,7 @@
 const roman = "0 I II III IV V VI VII VIII IX X XI XII XIII XIV XV".split(" ");
 const romanize = n => roman[n] || n;
 
-// eslint-disable next-line
-var app;
+let app;
 
 function initVue() {
 	app = new Vue({
@@ -16,7 +15,7 @@ function initVue() {
 				switch (Number(n)) {
 					case 54:
 						return "pogger button";
-					case 17:
+					case 17: {
 						if (game.inLab) return `Nothing to see here...`;
 						let out = "Rebirth.<br>";
 						const RP = rawCalcRP();
@@ -25,11 +24,14 @@ function initVue() {
 								RP.sub(1).abs()
 							)}&hairsp;RP`;
 						else
-							out += `next in ${this.format(
-								new D(1).sub(RP.mod(1))
+							out += `next in ${not.format(
+								new D(1).sub(RP.mod(1)),
+								2,
+								2
 							)}&hairsp;RP`;
 						out += `<br>${this.format(RP.max(0))}&hairsp;RP`;
 						return out;
+					}
 					case 15:
 						return "Start the game.<br>Cost: Free";
 					default:
@@ -49,24 +51,28 @@ function initVue() {
 				switch (Number(n)) {
 					case 14:
 						out = `Content Expansion
-Cost: ${not.format(85, 2, 0)} Total RP`;
+Cost: ${this.format(85)} Total RP`;
 						break;
 					case 63:
 						out = `Unlock The Lab.
-Cost: ${not.format(470, 2, 0)} Total RP`;
+Cost: ${this.format(470)} Total RP`;
 						break;
 					case 24:
 					case 34:
-					case 44:
+					case 44: {
 						const name = athNames[Math.floor(n / 10) - 2];
 						out = `Buy a${name === "a" ? "n" : ""} ${name}.
 Cost: ${this.format(athCosts[name]())} Total RP`;
 						break;
+					}
 					default:
 						if (
-							rebirthUpgradeInfo[n][1].length !==
+							rebirthUpgradeInfo[n][1].length ===
 							game.rupgrades[n]
 						)
+							out = `${rebirthUpgradeInfo[n][0]}
+Maxed!`;
+						else
 							out = `${rebirthUpgradeInfo[n][0]}
 Upgrade to tier ${romanize(game.rupgrades[n] + 1 || 1)}
 Cost: ${this.format(
@@ -74,9 +80,7 @@ Cost: ${this.format(
 									game.rupgrades[n] || 0
 								] || Infinity
 							)}RP`;
-						else
-							out = `${rebirthUpgradeInfo[n][0]}
-Maxed!`;
+
 						break;
 				}
 				if (formulas[`rupg${n}`])
@@ -108,7 +112,7 @@ Cost: ${
 			formatFormula: (n, u) => {
 				if (n instanceof D || typeof n === "number")
 					return `${u === "13" ? "÷" : "x"}${not.format(n, 2, 0)}`;
-				else return n;
+				return n;
 			},
 			uclass: n => ({
 				btn: true,
@@ -143,6 +147,7 @@ Cost: ${
 			},
 			showRebirthRow,
 			showRebirthCol,
+			getLabText,
 			clickHandler: n => {
 				switch (Number(n)) {
 					case 13:

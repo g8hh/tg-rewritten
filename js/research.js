@@ -16,7 +16,7 @@ function getSPGain() {
 		Math.log(
 			game.x.amount.mul(game.y.amount).mul(game.z.amount).add(1).log10() +
 				1
-		) - game.sciencePoints.amount,
+		),
 		0
 	);
 }
@@ -37,4 +37,11 @@ function exitLab() {
 	game.x.amount = new D(0);
 	game.y.amount = new D(0);
 	game.z.amount = new D(0);
+}
+
+function buyLabUpgrade(type) {
+	const cost = getLabText(type, true);
+	if (game.sciencePoints.amount.lt(cost)) return;
+	game.labUp[labTypes.indexOf(type)]++;
+	game.sciencePoints.amount = game.sciencePoints.amount.sub(cost);
 }

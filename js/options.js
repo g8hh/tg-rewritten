@@ -114,98 +114,6 @@ function save() {
 	localStorage.setItem("treegamebetasavebackup", str);
 }
 
-function preloadChoiceTree() {
-	const sides = [undefined, "left", "mid", "right"];
-	for (let i = 1; i < game.choice.depth + 1; i++) {
-		if (choiceCosts[i - 1].eq(0)) {
-			document
-				.getElementById(`c${i}2`)
-				.classList.remove("btn-creg-locked");
-			document.getElementById(`c${i}2`).classList.add("btn-creg-bought");
-		} else {
-			const c = game.choice.choices[Math.floor(i / 2)];
-			document
-				.getElementById(`c${i}${c}`)
-				.classList.remove(`btn-c${sides[c]}-locked`);
-			document
-				.getElementById(`c${i}${c}`)
-				.classList.remove(`btn-c${sides[c]}-unbought`);
-			document
-				.getElementById(`c${i}${c}`)
-				.classList.add(`btn-c${sides[c]}-bought`);
-			if (c !== 1) {
-				document
-					.getElementById(`c${i}1`)
-					.classList.remove("btn-cleft-unbought");
-				document
-					.getElementById(`c${i}1`)
-					.classList.add("btn-cleft-locked");
-			}
-			if (c !== 2) {
-				document
-					.getElementById(`c${i}2`)
-					.classList.remove("btn-cmid-unbought");
-				document
-					.getElementById(`c${i}2`)
-					.classList.add("btn-cmid-locked");
-			}
-			if (c !== 3) {
-				document
-					.getElementById(`c${i}3`)
-					.classList.remove("btn-cright-unbought");
-				document
-					.getElementById(`c${i}3`)
-					.classList.add("btn-cright-locked");
-			}
-		}
-	}
-	if (choiceCosts[game.choice.depth].eq(0)) {
-		const next = game.choice.depth + 1;
-		document
-			.getElementById(`c${next}2`)
-			.classList.remove("btn-creg-locked");
-		document.getElementById(`c${next}2`).classList.add("btn-creg-unbought");
-	} else if (game.choice.depth !== 0) {
-		document
-			.getElementById(`c${next}1`)
-			.classList.remove("btn-cleft-locked");
-		document
-			.getElementById(`c${next}1`)
-			.classList.add("btn-cleft-unbought");
-		document
-			.getElementById(`c${next}2`)
-			.classList.remove("btn-cmid-locked");
-		document.getElementById(`c${next}2`).classList.add("btn-cmid-unbought");
-		document
-			.getElementById(`c${next}3`)
-			.classList.remove("btn-cright-locked");
-		document
-			.getElementById(`c${next}3`)
-			.classList.add("btn-cright-unbought");
-	}
-	if (game.choice.depth > 0) {
-		const fc = game.choice.choices[0];
-		if (fc !== 1) {
-			document
-				.getElementById("c11")
-				.classList.remove("btn-cleft-unbought");
-			document.getElementById("c11").classList.add("btn-cleft-locked");
-		}
-		if (fc !== 2) {
-			document
-				.getElementById("c12")
-				.classList.remove("btn-cmid-unbought");
-			document.getElementById("c12").classList.add("btn-cmid-locked");
-		}
-		if (fc !== 3) {
-			document
-				.getElementById("c13")
-				.classList.remove("btn-cright-unbought");
-			document.getElementById("c13").classList.add("btn-cright-locked");
-		}
-	}
-}
-
 function preloadAthTree() {
 	game.aupgrades.forEach(upg => {
 		$(`#a${upg}`).classList.remove("btn-ath-unbought");
@@ -255,6 +163,9 @@ function load() {
 			amount: new D(0),
 			total: new D(0),
 		};
+	}
+	if (game.labUp === undefined) {
+		game.labUp = [0, 0, 0];
 	}
 	preloadAthTree();
 

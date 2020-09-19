@@ -15,8 +15,8 @@ It is licensed under the MIT lscense and made by Yhvr.
 	<title id="title">Tree Game</title>
 	<link rel="manifest" href="manifest.webmanifest">
 	<link id="themecss" type="text/css" rel="stylesheet" href="themes/Light.css">
-	<link type="text/css" rel="stylesheet" href="game.css">
 	<link id="hovercss" type="text/css" rel="stylesheet" href="themes/hover.css">
+	<link type="text/css" rel="stylesheet" href="game.css">
 	<link rel="shortcut icon" type="image/png" href="images/TG-192.png"/>
 </head>
 <body>
@@ -34,6 +34,7 @@ It is licensed under the MIT lscense and made by Yhvr.
 			<button class="btn tabbtn" id="rebirth" onclick="showTab(1)" v-if="game.rebirthed">Rebirth Tree</button>
 			<button class="btn tabbtn" id="another" onclick="showTab(2)" v-if="game.rupgrades[14] > 0">Another Tree</button>
 			<button class="btn tabbtn" id="thelab" onclick="showTab(3)" v-if="game.rupgrades[63] > 0">The Lab</button>
+			<button class="btn tabbtn" id="automation" onclick="showTab(5)" v-if="game.labUp[1] > 0">Automation</button>
 			<button class="btn tabbtn" id="options" onclick="showTab(4)">Options</button>
 		</div>
 		<div id="currencies">
@@ -123,6 +124,11 @@ It is licensed under the MIT lscense and made by Yhvr.
 		</div>
 	</div>
 
+	<div id="automationTab" class="tab">
+		<h2>automaton</h2>
+		<p>coming in a later update because i cant be bothered to add it now</p>
+	</div>
+
 
 	<div id="labTab" class="tab" style="text-align: center;">
 		<button class="btn" onclick="enterExitLab()" tooltip="Square all production, but Rebirth and Another Upgrades have no effect.">
@@ -131,17 +137,18 @@ It is licensed under the MIT lscense and made by Yhvr.
 		</button><br>
 		<div class="research-path">
 			<h3>Production Route</h3>
-			<p>biger nujmbger<br>cost: 5</p>
-			<button class="btn tabbtn">please</button>
+			<p>{{ getLabText("production") }}<br>Cost: {{ format(getLabText("production", 1)) }}</p>
+			<button class="btn tabbtn" onclick="buyLabUpgrade('production')">Research</button>
+		</div>
+		<div class="research-path">
+			<h3>Automation Route</h3>
+			<p>{{ getLabText("automation") }}<br>Cost: {{ format(getLabText("automation", 1)) }}</p>
+			<button class="btn tabbtn" onclick="buyLabUpgrade('automation')">Research</button>
 		</div>
 		<div class="research-path">
 			<h3>Content Route</h3>
-			<p>next prestige layer<br>cost: ∞</p>
-			<button class="btn tabbtn">buy</button>
-		</div><div class="research-path">
-			<h3>Automation Route</h3>
-			<p>laziness<br>cost: -2</p>
-			<button class="btn tabbtn">max all</button>
+			<p>{{ getLabText("content") }}<br>Cost: {{ format(getLabText("content", 1)) }}</p>
+			<button class="btn tabbtn" onclick="buyLabUpgrade('content')">Research</button>
 		</div>
 	</div>
 
@@ -163,7 +170,11 @@ It is licensed under the MIT lscense and made by Yhvr.
 			<button class="btn" onclick="importGame()" tooltip="Import a save that someone exported using the button to the left of me.">Import Game</button>
 		</div>
 		<p id="amounts">
-			<a href="credits.html">Credits</a> | <a href="help.html">Help</a> | <a href="https://yhvrwastaken.github.io/tree-game/">Legacy Edition</a> | <a href="discord_warning.html">Discord Server</a> | Tree Game v2.0.3 Alpha
+			<a href="credits.html">Credits</a> |
+			<a href="help.html">Help</a> |
+			<a href="https://yhvrwastaken.github.io/tree-game/">Legacy Edition</a> |
+			<a href="discord_warning.html">Discord Server</a> |
+			Tree Game v2.0.3 Alpha
 		</p>
 	</div>
 	</div>
@@ -218,9 +229,12 @@ It is licensed under the MIT lscense and made by Yhvr.
 	<script type="text/javascript" src="js/external-libs/dragscroll.js"></script>
 	<script type="text/javascript" src="js/external-libs/lzstring.js"></script>
 	<script type="text/javascript" src="js/external-libs/mousetrap.js"></script>
+	<script type="text/javascript" src="js/constants/upgrades.js"></script>
+	<script type="text/javascript" src="js/constants/rebirth.js"></script>
+	<script type="text/javascript" src="js/constants/another.js"></script>
+	<script type="text/javascript" src="js/constants/lab.js"></script>
 	<script type="text/javascript" src="js/preload.js"></script>
 	<script type="text/javascript" src="js/formulas.js"></script>
-	<script type="text/javascript" src="js/constants.js"></script>
 	<script type="text/javascript" src="js/production.js"></script>
 	<script type="text/javascript" src="js/keybind.js"></script>
 	<script type="text/javascript" src="js/render.js"></script>
@@ -231,8 +245,8 @@ It is licensed under the MIT lscense and made by Yhvr.
 	<script type="text/javascript" src="js/another.js"></script>
 	<script type="text/javascript" src="js/research.js"></script>
 	<script type="text/javascript" src="js/vue/rebirth.js"></script>
+	<script type="text/javascript" src="js/vue/lab.js"></script>
 	<script type="text/javascript" src="js/vue.js"></script>
-	<script type="text/javascript" src="js/shorthand.js"></script>
 	<script type="text/javascript" src="js/game.js" onload="init()"></script>
 </body>
 </html>

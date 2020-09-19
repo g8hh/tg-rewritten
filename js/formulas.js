@@ -63,11 +63,10 @@ const formulas = {
 		return ata;
 	},
 	rupg33: () =>
-		"x" +
-		new D(1)
+		`x${new D(1)
 			.mul(game.rupgrades[33] >= 1 ? 1.25 : 1)
 			.mul(game.rupgrades[33] >= 2 ? 1.1 : 1)
-			.toString(),
+			.toString()}`,
 	rupg35: () =>
 		`x${not.format(
 			rupg35Boost[game.rupgrades[35] || 0] **

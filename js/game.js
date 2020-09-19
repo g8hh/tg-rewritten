@@ -30,6 +30,7 @@ const defaultGame = {
 	hover: true,
 	rebirthed: false,
 	inLab: false,
+	labUp: [0, 0, 0],
 	trialTreeUnlocked: false,
 	inTrial: 0,
 	// __only__ store completions, rest can be done with m a f s
@@ -42,7 +43,7 @@ const defaultGame = {
 
 var game = defaultGame;
 
-const tabs = ["upgrades", "rebirth", "another", "lab", "options"];
+const tabs = ["upgrades", "rebirth", "another", "lab", "options", "automation"];
 
 function showTab(no, updateCurrentTab = true) {
 	if (updateCurrentTab) game.currentTab = no;
@@ -67,14 +68,16 @@ function buybtn(ele) {
 	if (typeof ele === "number") ele2 = document.getElementById(ele);
 	else ele2 = ele;
 	const id = Number(ele2 ? ele2.id : ele);
-	// check to make sure the user knows the upgrade exists
+	// Check to make sure the user knows the upgrade exists
 	if (id % 10 === 9 && game.rupgrades[65] < 1) return;
 	if (id >= 70 && game.rupgrades[65] < 2) return;
-	// i need this. i don't know why.
+	// I need this. i don't know why.
 	if (!ele2) return;
-	let cost = game.inLab ? new D(labCosts[id]) : new D(upgradeInfo[id][1]).div(
-		costDiv[(game.rupgrades[13] || 0) + (game.rupgrades[45] || 0)]
-	);
+	const cost = game.inLab
+		? new D(labCosts[id])
+		: new D(upgradeInfo[id][1]).div(
+				costDiv[(game.rupgrades[13] || 0) + (game.rupgrades[45] || 0)]
+		  );
 	const costCurr = upgradeInfo[id][2];
 	// Reject the purchase of the upgrade if you already have it
 	if (game.upgrades.includes(id)) return;
@@ -96,7 +99,11 @@ function buyCurrency(ele) {
 	if (typeof ele === "number") ele2 = document.getElementById(ele);
 	else ele2 = ele;
 	const id = Number(ele2.id);
-	let cost = game.inLab ? new D(labCosts[id]) : new D(upgradeInfo[id][1]).div(costDiv[(game.rupgrades[13] || 0) + (game.rupgrades[45] || 0)]);
+	const cost = game.inLab
+		? new D(labCosts[id])
+		: new D(upgradeInfo[id][1]).div(
+				costDiv[(game.rupgrades[13] || 0) + (game.rupgrades[45] || 0)]
+		  );
 	const costCurr = upgradeInfo[id][2];
 	if (game.upgrades.includes(id)) return;
 	if (cost.gt(game[costCurr].amount)) return;
@@ -125,9 +132,10 @@ function autobuy() {
 	if (game.rupgrades[15] >= 3) cache.zUpgrades.forEach(u => buybtn(u));
 }
 
-// big boye! only change if you're
+// Big boye! only change if you're
 // trying to speed through the
 // game for testing
+// eslint-disable-next-line prefer-const
 let timeSpeed = 1;
 
 window.setInterval(() => {
@@ -136,19 +144,28 @@ window.setInterval(() => {
 	const u = game.upgrades;
 
 	if (u.includes(15)) {
-		let gain = tickCalcX()
-		if (game.inLab) gain = gain.pow(2)
-		game.x.amount = game.x.amount.add(gain.times(diff / 1000).times(timeSpeed));
+		let gain = tickCalcX();
+		if (game.inLab) gain = gain.pow(2);
+		if (game.labUp[0] >= 1) gain = gain.pow(1.1);
+		game.x.amount = game.x.amount.add(
+			gain.times(diff / 1000).times(timeSpeed)
+		);
 	}
 	if (u.includes(13)) {
-		let gain = tickCalcY()
-		if (game.inLab) gain = gain.pow(2)
-		game.y.amount = game.y.amount.add(gain.times(diff / 1000).times(timeSpeed));
+		let gain = tickCalcY();
+		if (game.inLab) gain = gain.pow(2);
+		if (game.labUp[0] >= 1) gain = gain.pow(1.1);
+		game.y.amount = game.y.amount.add(
+			gain.times(diff / 1000).times(timeSpeed)
+		);
 	}
 	if (u.includes(47)) {
-		let gain = tickCalcZ()
-		if (game.inLab) gain = gain.pow(2)
-		game.z.amount = game.z.amount.add(gain.times(diff / 1000).times(timeSpeed));
+		let gain = tickCalcZ();
+		if (game.inLab) gain = gain.pow(2);
+		if (game.labUp[0] >= 1) gain = gain.pow(1.1);
+		game.z.amount = game.z.amount.add(
+			gain.times(diff / 1000).times(timeSpeed)
+		);
 	}
 
 	autobuy();
