@@ -18,6 +18,10 @@ const defaultGame = {
 		amount: new D(0),
 		bought: new D(0),
 	},
+	sciencePoints: {
+		amount: new D(0),
+		total: new D(0),
+	},
 	upgrades: [],
 	rupgrades: {},
 	choice: {
@@ -145,24 +149,21 @@ window.setInterval(() => {
 
 	if (u.includes(15)) {
 		let gain = tickCalcX();
-		if (game.inLab) gain = gain.pow(2);
-		if (game.labUp[0] >= 1) gain = gain.pow(1.1);
+		gain = getAllMult(gain);
 		game.x.amount = game.x.amount.add(
 			gain.times(diff / 1000).times(timeSpeed)
 		);
 	}
 	if (u.includes(13)) {
 		let gain = tickCalcY();
-		if (game.inLab) gain = gain.pow(2);
-		if (game.labUp[0] >= 1) gain = gain.pow(1.1);
+		gain = getAllMult(gain);
 		game.y.amount = game.y.amount.add(
 			gain.times(diff / 1000).times(timeSpeed)
 		);
 	}
 	if (u.includes(47)) {
 		let gain = tickCalcZ();
-		if (game.inLab) gain = gain.pow(2);
-		if (game.labUp[0] >= 1) gain = gain.pow(1.1);
+		gain = getAllMult(gain);
 		game.z.amount = game.z.amount.add(
 			gain.times(diff / 1000).times(timeSpeed)
 		);

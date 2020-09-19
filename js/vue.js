@@ -10,6 +10,7 @@ function initVue() {
 		el: "#app",
 		data: {
 			game,
+			showIDs: false,
 			format: n => not.format(n, 2, 0),
 			upg(n) {
 				switch (Number(n)) {
@@ -20,16 +21,18 @@ function initVue() {
 						let out = "Rebirth.<br>";
 						const RP = rawCalcRP();
 						if (RP.lt(1))
-							out += `in ${this.format(
-								RP.sub(1).abs()
-							)}&hairsp;RP`;
-						else
-							out += `next in ${not.format(
-								new D(1).sub(RP.mod(1)),
+							out += `in ${not.format(
+								RP.sub(1).abs(),
 								2,
 								2
 							)}&hairsp;RP`;
-						out += `<br>${this.format(RP.max(0))}&hairsp;RP`;
+						else
+							out += `next in ${not.format(
+								RP.mod(1).sub(1).abs(),
+								2,
+								2
+							)}&hairsp;RP`;
+						out += `<br>${this.format(RP.max(0).floor())}&hairsp;RP`;
 						return out;
 					}
 					case 15:

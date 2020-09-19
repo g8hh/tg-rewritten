@@ -63,7 +63,7 @@ It is licensed under the MIT lscense and made by Yhvr.
 				:class="uclass(Number(upgrade))"
 				:id="upgrade"
 				@click="clickHandler(upgrade)"
-				v-html="upg(upgrade)"
+				v-html="(showIDs ? upgrade + '<br>' : '') + upg(upgrade)"
 				v-if="showRow(upgrade) && showCol(upgrade)"
 			></button>
 		</div>
@@ -169,13 +169,20 @@ It is licensed under the MIT lscense and made by Yhvr.
 			<button class="btn" onclick="exportGame()" tooltip="Copy the save to your clipboard in case you need it for some reason.">Export Game</button>
 			<button class="btn" onclick="importGame()" tooltip="Import a save that someone exported using the button to the left of me.">Import Game</button>
 		</div>
+
 		<p id="amounts">
 			<a href="credits.html">Credits</a> |
 			<a href="help.html">Help</a> |
 			<a href="https://yhvrwastaken.github.io/tree-game/">Legacy Edition</a> |
 			<a href="discord_warning.html">Discord Server</a> |
-			Tree Game v2.0.3 Alpha
+			Tree Game: Rewritten Alpha
 		</p>
+
+		<details>
+			<summary>Developer Options</summary>
+			<p>Developer Options reset on refresh.</p>
+			<button class="btn" @click="showIDs = !showIDs">Show Upgrade IDs</button>
+		</details>
 	</div>
 	</div>
 

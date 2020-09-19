@@ -78,11 +78,6 @@ function buyreb(id) {
 }
 
 function respecRebirthTree() {
-	// Let amount = 0;
-	// for (const key in game.rupgrades) {
-	// for (let i = game.rupgrades[key]; i !== 0; i--)
-	// amount += rebirthUpgradeInfo[key][1][i - 1];
-	// }
 	if (
 		!confirm(
 			"Are you sure you want to respec your" +
@@ -90,6 +85,7 @@ function respecRebirthTree() {
 		)
 	)
 		return;
+	const lab = game.rupgrades[63] >= 1;
 	if (game.rupgrades[14] >= 1) {
 		game.rp.amount = game.rp.total.sub(79);
 		const r = rebirthUpgradeInfo;
@@ -113,5 +109,6 @@ function respecRebirthTree() {
 		game.rupgrades = {};
 		game.rp.amount = game.rp.total;
 	}
+	if (lab) game.rupgrades[63] = 1;
 	rebirth(false);
 }

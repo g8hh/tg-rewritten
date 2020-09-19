@@ -14,9 +14,9 @@ function enterExitLab() {
 function getSPGain() {
 	return Math.max(
 		Math.log(
-			game.x.amount.mul(game.y.amount).mul(game.z.amount).add(1).log10() +
+			game.x.amount.mul(game.y.amount).mul(game.z.amount).add(1).log(5) +
 				1
-		),
+		) ** 2,
 		0
 	);
 }

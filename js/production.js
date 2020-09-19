@@ -92,6 +92,7 @@ function recalcZ() {
 	const u = game.upgrades;
 	const r = game.inLab ? {} : game.rupgrades;
 	const a = game.inLab ? [] : game.aupgrades;
+	const l = game.labUp[0];
 
 	let ata = new D(1);
 
@@ -117,6 +118,8 @@ function recalcZ() {
 	if (r[85] >= 1)
 		ata = ata.mul(Object.values(r).reduce((b, c) => b + c) ** 1.75);
 	if (a.includes(4)) ata = ata.mul(1e5);
+
+	if (l >= 3) ata = ata.mul(10);
 
 	return ata;
 }
@@ -237,4 +240,12 @@ function tickCalcZ() {
 	if (a.includes(14)) ata = ata.mul(new D(2).pow(game.a.bought));
 
 	return ata;
+}
+
+function getAllMult(n) {
+	let gain = new D(n);
+	if (game.inLab) gain = gain.pow(2);
+	if (game.labUp[0] >= 1) gain = gain.pow(1.1);
+	if (game.inLab && game.labUp[0] >= 2) gain = gain.mul(1e5);
+	return gain;
 }

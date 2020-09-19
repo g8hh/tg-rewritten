@@ -1,15 +1,19 @@
 "use strict";
 
 const labText = {
-	production: ["Raise all production to the power of 1.1.", "???"],
+	production: [
+		"Raise all production to the power of 1.1.",
+		"Multiply xyz production by 1e5, but only in The Lab.",
+		"Multiply z production by 10."
+	],
 	automation: ["Unlock the Automation tab.", "???"],
 	content: ["???"],
 };
 
 const labUpgCosts = {
-	production: [3, 1000],
-	automation: [0, 1000],
-	content: [1000],
+	production: [10, 15, 100],
+	automation: [0, 1e100],
+	content: [1e100],
 };
 
 const labCosts = {
@@ -38,7 +42,7 @@ const labCosts = {
 	39: Infinity,
 
 	43: Infinity,
-	44: Infinity,
+	44: 1e11,
 	45: 1e10,
 	46: 1e6,
 	47: 1e9,
@@ -48,14 +52,14 @@ const labCosts = {
 	53: Infinity,
 	54: Infinity,
 	55: 5e10,
-	56: Infinity,
-	57: Infinity,
-	58: Infinity,
+	56: 1e22,
+	57: 5e8,
+	58: 1e36,
 	59: Infinity,
 
 	63: Infinity,
 	64: Infinity,
-	65: Infinity,
+	65: 1e24,
 	66: Infinity,
 	67: Infinity,
 	68: Infinity,
