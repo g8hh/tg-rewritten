@@ -4,14 +4,14 @@ const labText = {
 	production: [
 		"Raise all production to the power of 1.1.",
 		"Multiply xyz production by 1e5, but only in The Lab.",
-		"Multiply z production by 10."
+		"Multiply z production by 10.", "???"
 	],
 	automation: ["Unlock the Automation tab.", "???"],
 	content: ["???"],
 };
 
 const labUpgCosts = {
-	production: [10, 15, 100],
+	production: [10, 15, 100, 1e100],
 	automation: [0, 1e100],
 	content: [1e100],
 };

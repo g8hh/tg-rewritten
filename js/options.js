@@ -157,13 +157,12 @@ function load() {
 	$("#tabbarprefix").textContent = TABBAR_PREFIX_FANCY[game.tab[0]];
 	$("#tabbarsuffix").textContent = TABBAR_SUFFIX_FANCY[game.tab[1]];
 	if (!game.hover) document.getElementById("hovercss").href = "";
-	if (game.inLab === undefined) {
-		game.inLab = false;
+	if (game.inLab === undefined) game.inLab = false;
+	if (game.sciencePoints === undefined)
 		game.sciencePoints = {
 			amount: new D(0),
 			total: new D(0),
 		};
-	}
 	if (game.labUp === undefined) {
 		game.labUp = [0, 0, 0];
 	}
