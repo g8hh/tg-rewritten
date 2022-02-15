@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<!--
+Tree Game is an incremental game based around a skill tree.
+It is licensed under the MIT lscense and made by Yhvr.
+-->
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="application-name" content="Tree Game">
+	<meta name="author" content="Yhvr">
+	<meta name="description" content="Tree Game is an incremental game based around skill trees and filling them up. Rebirth for powerful upgrades, carefully plan your strategies, and reach massive numbers!">
+	<meta name="keywords" content="Incremental Game, Game, Skill Tree, HTML5, Tree Game, JS, Javascript, Javascript Game">
+	<title id="title">升级链 - Tree Game</title>
+	<link rel="manifest" href="manifest.webmanifest">
+	<link id="themecss" type="text/css" rel="stylesheet" href="themes/Light.css">
+	<link id="hovercss" type="text/css" rel="stylesheet" href="themes/hover.css">
+	<link type="text/css" rel="stylesheet" href="game.css">
+	<link rel="shortcut icon" type="image/png" href="images/TG-192.png"/>
+</head>
+<body>
+<script src="chs.js?07071443"></script>
+<script src="https://cdn.jsdelivr.net/gh/g8hh/g8hh.github.io/zh/core.js"></script>
+	<div id="loading">
+		<span>
+			Loading...
+			<sup>If you see this for over a second, the game probably errored.</sup>
+		</span>
+	</div>
+	<div id="app">
+	<noscript>Tree Game requires you to enable JavaScript to play. If you don't know what JavaScript is or didn't disable it, try using another web browser.</noscript>
+	<div id="header">
+		<div id="tabs">
+			<button class="btn tabbtn" id="upgrades" onclick="showTab(0)">Upgrade Tree</button>
+			<button class="btn tabbtn" id="rebirth" onclick="showTab(1)" v-if="game.rebirthed">Rebirth Tree</button>
+			<button class="btn tabbtn" id="another" onclick="showTab(2)" v-if="game.rupgrades[14] > 0">Another Tree</button>
+			<button class="btn tabbtn" id="thelab" onclick="showTab(3)" v-if="game.rupgrades[63] > 0">The Lab</button>
+			<button class="btn tabbtn" id="automation" onclick="showTab(5)" v-if="game.labUp[1] > 0">Automation</button>
+			<button class="btn tabbtn" id="options" onclick="showTab(4)">Options</button>
+		</div>
+		<div id="currencies">
+			<span id="x">{{ format(game.x.amount) }}&hairsp;x</span>
+			<span id="y" v-if="game.upgrades.includes(13) || game.rupgrades[14] > 0">{{ format(game.y.amount) }}&hairsp;y</span>
+			<span id="z" v-if="game.upgrades.includes(47) || game.rupgrades[14] > 0">{{ format(game.z.amount) }}&hairsp;z</span>
+			<span id="rp" v-if="game.rebirthed">{{ format(game.rp.amount )}}RP</span>
+			<span id="a" v-if="game.rupgrades[14] > 0">{{ format(game.a.amount) }}&hairsp;a</span>
+			<span id="b" v-if="game.b.bought.gte(1)">{{ format(game.b.amount) }}&hairsp;b</span>
+			<span id="c" v-if="game.c.bought.gte(1)">{{ format(game.c.amount) }}&hairsp;c</span>
+			<span id="sp" v-if="game.rupgrades[63] > 0">{{ format(game.sciencePoints.amount) }}&hairsp;SP</span>
+		</div>
+		<div id="center-btns">
+			<button class="btn centerbtn" onclick="max()">Max All (m)</button>
+			<button class="btn centerbtn" onclick="respecRebirthTree()" v-if="game.currentTab === 1">Respec Rebirth Tree.</button>
+		</div>
+	</div>
+
+	<p v-if="game.currentTab >= 10 || game.currentTab < 0">oi what ya doin</p>
+
+	<!-- Upgrade tab -->
+	<div id="upgradesTab" class="tab">
+		<div v-for="(row, rowID) in rowInfo" class="table">
+			<button
+				v-for="upgrade in rowInfo[rowID]"
+				:class="uclass(Number(upgrade))"
+				:id="upgrade"
+				@click="clickHandler(upgrade)"
+				v-html="(showIDs ? upgrade + '<br>' : '') + upg(upgrade)"
+				v-if="showRow(upgrade) && showCol(upgrade)"
+			></button>
+		</div>
+	</div>
+
+	<!-- Rebirth Tab -->
+	<div id="rebirthTab" class="tab">
+		<div class="table" v-for="(row, rowID) in rebirthRowInfo" class="table">
+			<button v-for="upgrade in rebirthRowInfo[rowID]"
+				:class="rclass(Number(upgrade))"
+				:id="'r' + upgrade"
+				:tooltip="rebirthTooltip(upgrade)"
+				@click="rebirthClickHandler(upgrade)"
+				v-if="showRebirthRow(upgrade) && showRebirthCol(upgrade)"
+				v-html="rpg(upgrade)"
+			></button>
+		</div>
+		<p style="text-align: center;"><em>You have {{ game.rp.total }} total RP.
+			If you're stuck, check out the <a href="help.html">Help page</a>.</em></p>
+	</div>
+
+
+	<div id="anotherTab" class="tab">
+		<div class="table">
+			<td><button class="btn btn-ath-unbought" id="a1" onclick="buyath(1)">{{ apg(1) }}</button></td>
+			<td><button class="btn btn-ath-locked"   id="a2" onclick="buyath(2)">{{ apg(2) }}</button></td>
+			<td><button class="btn btn-ath-locked"   id="a3" onclick="buyath(3)">{{ apg(3) }}</button></td>
+			<td><button class="btn btn-ath-locked"   id="a4" onclick="buyath(4)">{{ apg(4) }}</button></td>
+			<td><button class="btn btn-ath-locked"   id="a5" onclick="buyath(5)">{{ apg(5) }}</button></td>
+		</div>
+		<div class="table">
+			<td><button class="btn btn-ath-locked"  id="a6" onclick="buyath(6)">{{ apg(6) }}</button></td>
+			<td><button class="btn btn-ath-locked"  id="a7" onclick="buyath(7)">{{ apg(7) }}</button></td>
+			<td><button class="btn btn-ath-locked"  id="a8" onclick="buyath(8)">{{ apg(8) }}</button></td>
+			<td><button class="btn btn-ath-locked"  id="a9" onclick="buyath(9)">{{ apg(9) }}</button></td>
+			<td><button class="btn btn-ath-locked" id="a10" onclick="buyath(10)">{{ apg(10) }}</button></td>
+		</div>
+		<div class="table">
+			<td><button class="btn btn-ath-locked" id="a11" onclick="buyath(11)">{{ apg(11) }}</button></td>
+			<td><button class="btn btn-ath-locked" id="a12" onclick="buyath(12)">{{ apg(12) }}</button></td>
+			<td><button class="btn btn-ath-locked" id="a13" onclick="buyath(13)">{{ apg(13) }}</button></td>
+			<td><button class="btn btn-ath-locked" id="a14" onclick="buyath(14)">{{ apg(14) }}</button></td>
+			<td><button class="btn btn-ath-locked" id="a15" onclick="buyath(15)">{{ apg(15) }}</button></td>
+		</div>
+		<div class="table">
+			<td><button class="btn btn-ath-locked" id="a16" onclick="buyath(16)">{{ apg(16) }}</button></td>
+			<td><button class="btn btn-ath-locked" id="a17" onclick="buyath(17)">{{ apg(17) }}</button></td>
+			<td><button class="btn btn-ath-locked" id="a18" onclick="buyath(18)">{{ apg(18) }}</button></td>
+			<td><button class="btn btn-ath-locked" id="a19" onclick="buyath(19)">{{ apg(19) }}</button></td>
+			<td><button class="btn btn-ath-locked" id="a20" onclick="buyath(20)">{{ apg(20) }}</button></td>
+		</div>
+		<div class="table">
+			<td><button class="btn btn-ath-locked" id="a21" onclick="buyath(21)">{{ apg(21) }}</button></td>
+			<td><button class="btn btn-ath-locked" id="a22" onclick="buyath(22)">{{ apg(22) }}</button></td>
+			<td><button class="btn btn-ath-locked" id="a23" onclick="buyath(23)">{{ apg(23) }}</button></td>
+			<td><button class="btn btn-ath-locked" id="a24" onclick="buyath(24)">{{ apg(24) }}</button></td>
+			<td><button class="btn btn-ath-locked" id="a25" onclick="buyath(25)">{{ apg(25) }}</button></td>
+		</div>
+	</div>
+
+	<div id="automationTab" class="tab">
+		<h2>automaton</h2>
+		<p>coming in a later update because i cant be bothered to add it now</p>
+	</div>
+
+
+	<div id="labTab" class="tab" style="text-align: center;">
+		<button class="btn" onclick="enterExitLab()" tooltip="Square all production, but Rebirth and Another Upgrades have no effect.">
+			{{ game.inLab ? "Exit" : "Enter" }} The Lab.
+			<span v-if="game.inLab"><br>Exit for {{ format(getSPGain()) }} Science Points</span>
+		</button><br>
+		<div class="research-path">
+			<h3>Production Route</h3>
+			<p>{{ getLabText("production") }}<br>Cost: {{ format(getLabText("production", 1)) }}</p>
+			<button class="btn tabbtn" onclick="buyLabUpgrade('production')">Research</button>
+		</div>
+		<div class="research-path">
+			<h3>Automation Route</h3>
+			<p>{{ getLabText("automation") }}<br>Cost: {{ format(getLabText("automation", 1)) }}</p>
+			<button class="btn tabbtn" onclick="buyLabUpgrade('automation')">Research</button>
+		</div>
+		<div class="research-path">
+			<h3>Content Route</h3>
+			<p>{{ getLabText("content") }}<br>Cost: {{ format(getLabText("content", 1)) }}</p>
+			<button class="btn tabbtn" onclick="buyLabUpgrade('content')">Research</button>
+		</div>
+	</div>
+
+
+	<div id="optionsTab" class="tab"> <!-- Options Tab-->
+		<div>
+			<button class="btn" onclick="changeTheme()" tooltip="How your game looks.">Change Theme<br>Currently <span id="theme">Light</span>.</button>
+			<div class="btn btn-fake"><span>Change Notation<br><select id="notation" v-model="game.notation">
+				<option :value="index" v-for="(notation, index) in notations">{{ fancyNotations[index] || notation }}</option>
+			</select></span></div>
+			<button class="btn" onclick="changeTabPrefix()" tooltip='How the "Tree Game" games title in your browser tab looks.'>Change Tab Bar Prefix<br>Currently <span id="tabbarprefix">Long</span>.</button>
+			<button class="btn" onclick="changeTabSuffix()" tooltip='How the "___ currency" info in your browsers tab looks.'>Change Tab Bar Suffix<br>Currently <span id="tabbarsuffix">x</span>.</button>
+			<button class="btn" onclick="toggleHover()" tooltip='Make the buttons increase size when you hover over them.'>Toggle Hover<br>Currently {{ game.hover ? "ON" : "OFF" }}.</button>
+		</div>
+		<div>
+			<tr><button class="btn" onclick="save()" tooltip="Autosaves every 10 seconds. Leave the game at one point and pick it up later!">Save Game</button></tr>
+			<tr><button class="btn" onclick="resetGame()" tooltip="If you ever feel like replaying the game.">Reset Game</button></tr>
+			<button class="btn" onclick="exportGame()" tooltip="Copy the save to your clipboard in case you need it for some reason.">Export Game</button>
+			<button class="btn" onclick="importGame()" tooltip="Import a save that someone exported using the button to the left of me.">Import Game</button>
+		</div>
+
+		<p id="amounts">
+			<a href="credits.html">Credits</a> |
+			<a href="help.html">Help</a> |
+			<a href="https://yhvrwastaken.github.io/tree-game/">Legacy Edition</a> |
+			<a href="discord_warning.html">Discord Server</a> |
+			Tree Game: Rewritten Alpha
+		</p>
+
+		<details>
+			<summary>Developer Options</summary>
+			<p>Developer Options reset on refresh.</p>
+			<button class="btn" @click="showIDs = !showIDs">Show Upgrade IDs</button>
+		</details>
+	</div>
+	</div>
+
+
+	<canvas id="tree-canvas" class="canvas"></canvas>
+	<!--<canvas id="rebirth-canvas" class="canvas"></canvas>
+	<canvas id="another-canvas" class="canvas"></canvas>
+	<canvas id="trial-canvas" class="canvas"></canvas>-->
+
+
+	<script type="text/javascript">
+		let promptErr = true;
+		window.onerror = (error, _, line) => {
+			if (promptErr)
+				promptErr = confirm("An error has occured in the game. If you wouldn't" +
+				" like to see any more errors, tap \"Cancel\". If possible, please " +
+				" open your browser's JavaScript console and provide a stack trace.");
+			if (promptErr) alert(`Debug Info (Please include in report)
+	Line No. ${line}
+	Error: ${error}`);
+		};
+
+		function init() {
+			if (![null, "null", "no", undefined, "{}"].includes(localStorage.getItem("treegamebetasave"))) load();
+			initVue();
+			renderFocusedTree();
+			showTab(game.currentTab, false)
+			$("#loading").remove();
+			if (game.a.cost) {
+				game = {
+					...game,
+					a: {
+						amount: new D(0),
+						bought: new D(0),
+					},
+					b: {
+						amount: new D(0),
+						bought: new D(0),
+					},
+					c: {
+						amount: new D(0),
+						bought: new D(0),
+					},
+				}
+			}
+		}
+	</script>
+	<script type="text/javascript" src="js/external-libs/breakinf.js"></script>
+	<script type="text/javascript" src="js/external-libs/vue.js"></script>
+	<script type="text/javascript" src="js/external-libs/notations.js"></script>
+	<script type="text/javascript" src="js/external-libs/dragscroll.js"></script>
+	<script type="text/javascript" src="js/external-libs/lzstring.js"></script>
+	<script type="text/javascript" src="js/external-libs/mousetrap.js"></script>
+	<script type="text/javascript" src="js/constants/upgrades.js"></script>
+	<script type="text/javascript" src="js/constants/rebirth.js"></script>
+	<script type="text/javascript" src="js/constants/another.js"></script>
+	<script type="text/javascript" src="js/constants/lab.js"></script>
+	<script type="text/javascript" src="js/preload.js"></script>
+	<script type="text/javascript" src="js/formulas.js"></script>
+	<script type="text/javascript" src="js/production.js"></script>
+	<script type="text/javascript" src="js/keybind.js"></script>
+	<script type="text/javascript" src="js/render.js"></script>
+	<script type="text/javascript" src="js/options.js"></script>
+	<script type="text/javascript" src="js/rebirth.js"></script>
+	<script type="text/javascript" src="js/choice.js"></script>
+	<script type="text/javascript" src="js/trial.js"></script>
+	<script type="text/javascript" src="js/another.js"></script>
+	<script type="text/javascript" src="js/research.js"></script>
+	<script type="text/javascript" src="js/vue/rebirth.js"></script>
+	<script type="text/javascript" src="js/vue/lab.js"></script>
+	<script type="text/javascript" src="js/vue.js"></script>
+	<script type="text/javascript" src="js/game.js" onload="init()"></script>
+	<!--站长统计-->
+    <div style="display: none">
+       <script type="text/javascript" src="https://v1.cnzz.com/z_stat.php?id=1280006740&web_id=1280006740"></script>
+    </div>
+</body>
+</html>
