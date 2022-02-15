@@ -22,7 +22,7 @@ function getSPGain() {
 }
 
 function enterLab() {
-	if (!confirm("Are you sure you want to enter The Lab?")) return;
+	if (!confirm("您确定要进入实验室吗？")) return;
 	game.inLab = true;
 	game.upgrades = [];
 	game.x.amount = new D(0);

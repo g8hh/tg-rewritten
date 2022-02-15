@@ -58,7 +58,7 @@ function buyC(depth, choice) {
 function respec() {
 	if (game.rupgrades[63] < 1) return;
 	if (game.inTrial !== 0) {
-		if (!confirm("Respeccing while in a trial will exit the trial. Are you sure you want to do this?")) {
+		if (!confirm("在试用期间重新指定将退出试用。 你确定要这么做吗？")) {
 			return;
 		}
 		exitTrial();
