@@ -1,0 +1,40 @@
+.btn {
+	border: black thin solid;
+	background-color: white;
+}
+
+.btn-unbought {
+	background-color: lightgray;
+}
+
+.btn-bought {
+	background-color: white;
+}
+
+.btn-locked {
+	background-color: gray;
+}
+
+.btn-rebirth-locked {
+	background-color: rgb(151, 0, 151);
+}
+
+.btn-rebirth-unbought {
+	background-color: rgb(191, 0, 191);
+}
+
+.btn-rebirth-bought {
+	background-color: rgb(255, 0, 255);
+}
+
+.btn-ath-bought {
+	background-color: rgb(150, 150, 255);
+}
+
+.btn-ath-unbought {
+	background-color: rgb(110, 110, 255);
+}
+
+.btn-ath-locked {
+	background-color: rgb(60, 60, 255);
+}

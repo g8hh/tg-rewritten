@@ -1,0 +1,203 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
+
+*,
+button,
+.btn {
+	outline: none;
+	font-family: "Inter", sans-serif, "Times New Roman";
+}
+
+body {
+	margin: 0;
+	width: auto;
+}
+
+select {
+	margin-top: 1px;
+}
+
+.tab {
+	display: flex;
+	flex-direction: column;
+}
+
+.tab div,
+.tab table {
+	flex: 1;
+}
+
+#tabs {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+}
+
+#center-btns {
+	text-align: center;
+}
+
+#loading,
+#loading span {
+	position: fixed;
+	padding: 0;
+	margin: 0;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background: rgba(255, 255, 255, 0.5);
+	color: black;
+	z-index: 99999999;
+}
+
+#loading span {
+	font-size: 150px;
+	text-align: center;
+	vertical-align: middle;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#loading span sup {
+	font-size: 25px;
+}
+
+.canvas {
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	position: absolute;
+	z-index: -999;
+}
+
+#x,
+#y,
+#z,
+#rp,
+#a,
+#b,
+#c,
+#sp {
+	min-width: 100px;
+	display: inline-block;
+}
+
+#header {
+	width: 100%;
+}
+
+.table {
+	display: flex !important;
+}
+
+@media (min-width: 955px) {
+	.table {
+		justify-content: center;
+	}
+}
+
+.btn {
+	font-weight: bold;
+	width: 170px;
+	min-width: 80px;
+	height: 80px;
+	transition-duration: 0.5s;
+	cursor: pointer;
+	border-radius: 4px;
+	font-size: 0.65rem;
+	vertical-align: top;
+	margin: 7px;
+	z-index: 999;
+	display: inline-block;
+}
+
+.btn-hidden {
+	visibility: hidden !important;
+}
+
+.btn-fake {
+	position: relative;
+	width: 156px;
+	padding: 0 6px;
+	height: 78px;
+	text-align: center;
+}
+
+.btn-fake span {
+	margin: 0;
+	position: absolute;
+	text-align: center;
+	top: 50%;
+	left: 50;
+	transform: translateY(-50%) translateX(-50%);
+}
+
+.btn-rebirth-bought,
+.btn-rebirth-unbought,
+.btn-rebirth-locked,
+.btn-ath-bought,
+.btn-ath-unbought,
+.btn-ath-locked {
+	white-space: pre-wrap;
+}
+
+.tabbtn {
+	height: 40px;
+	width: unset;
+}
+
+.centerbtn {
+	height: 40px;
+}
+
+.research-path, .research-path-lower {
+	display: inline-block;
+	text-align: center;
+	width: 175px;
+}
+
+.research-path-lower-left {
+	margin-right: 10px
+}
+
+.research-path-lower-right {
+	margin-left: 10px
+}
+
+.research-path-lower h3 {
+	width: max-content;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* https://stackoverflow.com/a/25813336/10637301 */
+[tooltip]:before {
+	/* needed - do not touch */
+	content: attr(tooltip);
+	position: absolute;
+	opacity: 0;
+
+	/* customizable */
+	z-index: 100000;
+	transition: all 0.2s ease;
+	padding: 10px;
+	color: white;
+	border: solid black thin;
+	max-width: 150px;
+}
+
+[tooltip]:hover:before {
+	/* needed - do not touch */
+	opacity: 1;
+
+	/* customizable */
+	z-index: 100000;
+	background: rgba(0, 0, 0, 0.75);
+	margin-top: 25px;
+	margin-left: -50px;
+}
+
+[tooltip]:not([tooltip-persistent]):before {
+	pointer-events: none;
+}

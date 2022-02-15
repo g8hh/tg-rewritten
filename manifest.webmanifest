@@ -1,0 +1,21 @@
+{
+    "short_name": "Tree Game",
+    "name": "Tree Game",
+    "description": "Tree Game is an incremental game based around a skill tree.",
+    "icons": [
+      {
+        "src": "https://yhvr.gitlab.io/tree-game/images/TG-192.png",
+        "type": "image/png",
+        "sizes": "192x192"
+      },
+      {
+        "src": "https://yhvr.gitlab.io/tree-game/images/TG-512.png",
+        "type": "image/png",
+        "sizes": "512x512"
+      }
+    ],
+    "start_url": "?source=pwa",
+    "display": "standalone",
+    "scope": "/",
+    "prefer_related_applications": false
+}
