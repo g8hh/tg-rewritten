@@ -56,7 +56,7 @@ var cnItems = {
     "Currently ON.": "当前开启。",
     "Developer Options": "开发人员选项",
     "Developer Options reset on refresh.": "开发人员选项在刷新时重置。",
-    "Discord Server": "不和谐服务器",
+    "Discord Server": "Discord服务器",
     "Dots": "点",
     "Double all production.": "将所有产量翻倍。",
     "Double the production of x.": "x 的产量翻倍。",

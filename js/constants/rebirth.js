@@ -60,42 +60,42 @@ const rebirthUpgradeInfo = {
 };
 
 const rebirthTooltips = {
-	11: "Give a static multiplier to the production of x.",
-	12: "Give a multiplier to y based on several factors.",
-	13: "Decrease the cost of all upgrades.",
-	14: "Unlock Another Tree.",
-	15: "Automate the purchasing of normal upgrades.",
+	11: "为 x 的产生提供一个静态乘数。",
+	12: "根据几个因素为 y 提供一个乘数。",
+	13: "降低所有升级的成本。",
+	14: "解锁另一棵树。",
+	15: "自动购买普通升级。",
 
-	21: "Give a static multiplier to the production of y.",
-	22: "Give a multiplier to the production of x that changes over time.",
-	23: "Increase the core production of x.",
-	24: "You can spend these on Another Tree.",
-	25: "Give a dynamic multiplier to xyz production.",
+	21: "为 y 的产生提供一个静态乘数。",
+	22: "对随时间变化的 x 的产生给出一个乘数。",
+	23: "增加 x 的核心产量。",
+	24: "你可以把这些花在另一棵树上。",
+	25: "为 xyz 生产提供动态乘数。",
 
-	31: "Give a static multiplier to the production of z.",
-	32: "Give a multiplier to the production of z that grows as time progresses.",
-	33: "Gain a static multiplier to RP.",
-	34: "You can spend these on Another Tree.",
-	35: "Gain a multiplier to your RP based on the OoM of z you have.",
+	31: "给 z 的产生一个静态乘数。",
+	32: "给随着时间的推移而增长的 z 的产生乘数。",
+	33: "获得一个静态乘数到 RP。",
+	34: "你可以把这些花在另一棵树上。",
+	35: "根据您拥有的 z 的 OoM 获得您的 RP 乘数。",
 
-	41: "Make the RP formula better.",
-	42: "Give a static multiplier to xyz production.",
-	43: "Give a multiplier to xyz production based on your total RP.",
-	44: "You can spend these on Another Tree.",
-	45: "Make upgrades that cost xyz even cheaper.",
+	41: "使RP公式更好。",
+	42: "为 xyz 生产提供静态乘数。",
+	43: "根据您的总 RP 为 xyz 生产提供一个乘数。",
+	44: "你可以把这些花在另一棵树上。",
+	45: "使花费 xyz 的升级成本更低。",
 
-	55: "Boost xyz production based off of xyz production.",
+	55: "基于 xyz 生产提高 xyz 生产。",
 
 	63: "???",
-	65: "Unlock more upgrades on the main tree.",
+	65: "在主树上解锁更多升级。",
 
-	75: "Gain a boost to production based on the amount of upgrades you have.",
+	75: "根据您拥有的升级数量来提高产量。",
 
-	81: "Gain a boost to the core proudction of y.",
-	82: "Gain an exponential boost to the production of z.",
-	83: "Increase the core production of z.",
-	84: "Gain an exponential boost to y production.",
-	85: "Gain a boost to production based on the amount of rebirth upgrades you have.",
+	81: "提高 y 的核心产量。",
+	82: "对 z 的产生进行指数级提升。",
+	83: "增加 z 的核心产量。",
+	84: "为 y 生产获得指数级提升。",
+	85: "根据您拥有的重生升级数量来提高产量。",
 };
 
 const rebirthChildList = {
