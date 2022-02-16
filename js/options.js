@@ -188,9 +188,9 @@ function importGame() {
 }
 
 function resetGame() {
-	if (!confirm("Are you sure?")) return;
-	if (!confirm("This is a hard reset. There is no reward!")) return;
-	if (prompt('Type "yes" to delete your save.') !== "yes") return;
+	if (!confirm("你确定吗?")) return;
+	if (!confirm("这是一个硬重置。 没有奖励！")) return;
+	if (prompt('输入 "yes" 以删除你的存档.') !== "yes") return;
 	localStorage.removeItem("treegamebetasave");
 	localStorage.removeItem("treegamebetasavebackup");
 	window.location.reload();

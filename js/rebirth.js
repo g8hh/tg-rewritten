@@ -8,7 +8,7 @@ function rebirth(warning = true) {
 	if (gain.lt(1) && warning)
 		if (
 			!confirm(
-				"Are you sure you want to rebirth? You will get no reward."
+				"你确定要重生？ 你不会得到任何奖励。"
 			)
 		)
 			return;
@@ -80,8 +80,8 @@ function buyreb(id) {
 function respecRebirthTree() {
 	if (
 		!confirm(
-			"Are you sure you want to respec your" +
-				" rebirth tree? You will reset the current rebirth."
+			"你确定要重洗你的" +
+				" 重生树？ 您将重置当前的重生。"
 		)
 	)
 		return;
