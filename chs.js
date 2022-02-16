@@ -419,6 +419,7 @@ var cnRegReplace = new Map([
     [/^Increase core production of (.+) by (.+).$/, '将 $1 的核心产量提高 $2.'],
     [/^Buy (.+) .\nCost: (.+)  Total RP$/, '购买 $1.\n成本: $2 总RP'],
     [/^Buy an (.+) .\nCost: (.+)  Total RP$/, '购买 $1.\n成本: $2 总RP'],
+    [/^in (.+)  RP$/, '获得 $1 RP'],
     [/^next in (.+) RP$/, '下一个在 $1RP'],
     [/^Content Expansion\nCost: (.+) Total RP$/, '内容扩展\n成本: $1 总 RP'],
     [/^Buy an a.\nCost: (.+) Total RP$/, '购买 1个 a。\n成本: $1 总 RP'],
