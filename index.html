@@ -133,7 +133,7 @@ It is licensed under the MIT lscense and made by Yhvr.
 
 
 	<div id="labTab" class="tab" style="text-align: center;">
-		<button class="btn" onclick="enterExitLab()" tooltip="Square all production, but Rebirth and Another Upgrades have no effect.">
+		<button class="btn" onclick="enterExitLab()" tooltip="平方所有生产，但重生和另一个升级没有效果.">
 			{{ game.inLab ? "Exit" : "Enter" }} The Lab.
 			<span v-if="game.inLab"><br>Exit for {{ format(getSPGain()) }} Science Points</span>
 		</button><br>
@@ -157,19 +157,19 @@ It is licensed under the MIT lscense and made by Yhvr.
 
 	<div id="optionsTab" class="tab"> <!-- Options Tab-->
 		<div>
-			<button class="btn" onclick="changeTheme()" tooltip="How your game looks.">Change Theme<br>Currently <span id="theme">Light</span>.</button>
+			<button class="btn" onclick="changeTheme()" tooltip="你的游戏看起来如何.">Change Theme<br>Currently <span id="theme">Light</span>.</button>
 			<div class="btn btn-fake"><span>Change Notation<br><select id="notation" v-model="game.notation">
 				<option :value="index" v-for="(notation, index) in notations">{{ fancyNotations[index] || notation }}</option>
 			</select></span></div>
-			<button class="btn" onclick="changeTabPrefix()" tooltip='How the "Tree Game" games title in your browser tab looks.'>Change Tab Bar Prefix<br>Currently <span id="tabbarprefix">Long</span>.</button>
-			<button class="btn" onclick="changeTabSuffix()" tooltip='How the "___ currency" info in your browsers tab looks.'>Change Tab Bar Suffix<br>Currently <span id="tabbarsuffix">x</span>.</button>
-			<button class="btn" onclick="toggleHover()" tooltip='Make the buttons increase size when you hover over them.'>Toggle Hover<br>Currently {{ game.hover ? "ON" : "OFF" }}.</button>
+			<button class="btn" onclick="changeTabPrefix()" tooltip='浏览器选项卡中“Tree Game”游戏标题的外观。'>Change Tab Bar Prefix<br>Currently <span id="tabbarprefix">Long</span>.</button>
+			<button class="btn" onclick="changeTabSuffix()" tooltip='浏览器选项卡中“___ currency”信息的外观。'>Change Tab Bar Suffix<br>Currently <span id="tabbarsuffix">x</span>.</button>
+			<button class="btn" onclick="toggleHover()" tooltip='将鼠标悬停在按钮上时使按钮变大.'>Toggle Hover<br>Currently {{ game.hover ? "ON" : "OFF" }}.</button>
 		</div>
 		<div>
-			<tr><button class="btn" onclick="save()" tooltip="Autosaves every 10 seconds. Leave the game at one point and pick it up later!">Save Game</button></tr>
-			<tr><button class="btn" onclick="resetGame()" tooltip="If you ever feel like replaying the game.">Reset Game</button></tr>
-			<button class="btn" onclick="exportGame()" tooltip="Copy the save to your clipboard in case you need it for some reason.">Export Game</button>
-			<button class="btn" onclick="importGame()" tooltip="Import a save that someone exported using the button to the left of me.">Import Game</button>
+			<tr><button class="btn" onclick="save()" tooltip="每 10 秒自动保存一次。 暂时离开游戏，稍后再拿起它！">Save Game</button></tr>
+			<tr><button class="btn" onclick="resetGame()" tooltip="如果您想重玩游戏。">Reset Game</button></tr>
+			<button class="btn" onclick="exportGame()" tooltip="将存档复制到剪贴板，以备不时之需.">Export Game</button>
+			<button class="btn" onclick="importGame()" tooltip="导入某人使用我左侧的按钮导出的存档.">Import Game</button>
 		</div>
 
 		<p id="amounts">
